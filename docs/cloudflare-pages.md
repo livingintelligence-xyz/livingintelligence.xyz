@@ -1,10 +1,10 @@
 # Cloudflare Pages deployment behavior
 
-Status: **planned, not implemented**
+Status: **Phase 1 active; Phase 2 release workflow specified, not implemented**
 
-Last reviewed: **2026-08-13**
+Last reviewed: **2026-08-14**
 
-This document is the repository source of truth for the intended Cloudflare Pages behavior for `livingintelligence.xyz`. Future implementation work must inspect the current GitHub, Cloudflare Pages, and DNS state before making changes; the status recorded here is a planning snapshot, not proof of live provider state.
+This document is the repository source of truth for the current initial Cloudflare Pages deployment and the intended production behavior for `livingintelligence.xyz`. Provider state can change independently, so future deployment work must still inspect the current GitHub, Cloudflare Pages, deployment, custom-domain, and DNS state before making changes.
 
 ## Required behavior
 
@@ -19,13 +19,13 @@ This document is the repository source of truth for the intended Cloudflare Page
 
 ## Pages project configuration
 
-The intended initial configuration is:
+The verified initial configuration is:
 
 | Setting | Value |
 | --- | --- |
 | GitHub repository | `livingintelligence-xyz/livingintelligence.xyz` |
-| Preferred Pages project name | `livingintelligence-xyz` (confirm availability before creation) |
-| Expected Pages URL | `https://livingintelligence-xyz.pages.dev` if the preferred name is available |
+| Pages project name | `livingintelligence-xyz` |
+| Pages URL | `https://livingintelligence-xyz.pages.dev` |
 | Production branch | `main` |
 | Framework preset | None |
 | Repository root | `/` |
@@ -48,6 +48,10 @@ Official references:
 
 ## Phase 1: automatic `pages.dev` deployment
 
+State: **active**
+
+The Git-connected project was created on 2026-08-14. Its initial production deployment succeeded from `main` at commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`, and the assigned hostname serves the contents of `www/` over HTTPS. Automatic production deployments remain enabled for `main`.
+
 1. Give the Cloudflare Pages GitHub application access to this repository. Limit organization access to this repository when possible.
 2. Create the Git-connected Pages project using the configuration above.
 3. Leave automatic production deployments enabled for `main`.
@@ -59,6 +63,8 @@ Official references:
 During this phase, the Cloudflare-provided production URL is the only published website target. Living Intelligence will not add a custom preview, staging, or alpha hostname.
 
 ## Phase 2: guarded production cutover
+
+State: **specified and ready for later implementation; not configured**
 
 Use the same Pages project. Do not create a second production project.
 
@@ -155,7 +161,12 @@ As of the review date above:
 
 - The public GitHub repository and `main` branch exist.
 - The deployable static site is in `www/`.
-- No Cloudflare Pages project has been created by this repository setup work.
+- The Git-connected Cloudflare Pages project `livingintelligence-xyz` exists and publishes `www/` from `main` to `https://livingintelligence-xyz.pages.dev`.
+- The initial production deployment succeeded and was reconciled to Git commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`.
+- Automatic production deployments and preview deployments are enabled. A later push to `main` must still be observed before treating automatic follow-up deployment behavior as verified.
+- The project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
+- The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
+- An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
 - No GitHub Actions deployment workflow has been added.
 - No Cloudflare credentials or GitHub environment secrets have been configured by this repository setup work.
 - No DNS record or custom domain has been changed by this repository setup work.

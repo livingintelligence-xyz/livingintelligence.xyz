@@ -9,7 +9,8 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ## Project status
 
 - The initial landing page and brand assets are ready in `www/`.
-- Cloudflare Pages and DNS are not configured yet.
+- The Git-connected Cloudflare Pages project is active at [livingintelligence-xyz.pages.dev](https://livingintelligence-xyz.pages.dev/), with `main` publishing `www/` automatically.
+- No custom domain, production DNS, analytics, or guarded GitHub Actions release workflow is configured yet.
 - The LinkedIn URL in the page is provisional and should be confirmed before launch.
 - No open-source license has been selected. Public visibility does not grant permission to reuse the source or brand assets.
 
@@ -62,7 +63,7 @@ The deployment plan follows Cloudflare Pages' standard Git integration, with `ma
 1. Initially, automatic production deployments remain enabled and no custom domain is attached. Every push to `main` updates the project's Cloudflare-provided `*.pages.dev` site without introducing a separate preview subdomain.
 2. At production cutover, `livingintelligence.xyz` is attached to the same Pages project and automatic production-branch deployments are disabled. A guarded, manually dispatched GitHub Actions workflow then deploys the selected `main` commit with Wrangler, using a typed `livingintelligence.xyz` confirmation, serialized deployment runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks. Preview deployments for pull requests and other branches can remain enabled.
 
-The workflow, Cloudflare project, DNS, redirects, and analytics are deliberately not configured in this initial repository setup.
+The initial Cloudflare Pages project and Git deployment are active. The guarded custom-domain workflow is specified but deliberately remains unimplemented until production cutover; DNS, redirects, custom domains, and analytics are not configured.
 
 See [the Cloudflare Pages deployment plan](docs/cloudflare-pages.md) for the intended environments, production release gate, verification, and rollback behavior.
 
