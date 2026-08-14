@@ -53,7 +53,9 @@ Before production launch, also verify the canonical URL, social preview, icon re
 
 ## Deployment
 
-The intended production host is Cloudflare Pages, connected to this repository with `main` as the production branch and `www/` as the deployable static site. Hosting, DNS, redirects, and analytics are deliberately not configured in this initial repository setup.
+The intended production host is Cloudflare Pages, with `main` as the release branch and `www/` as the deployable static site. Production deployment will use a guarded, manually dispatched GitHub Actions workflow modeled on the `alexfili.pe` production release: a typed `livingintelligence.xyz` confirmation, serialized deployment runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks. Ordinary pushes to `main` will not deploy the production website automatically.
+
+The workflow, Cloudflare project, DNS, redirects, and analytics are deliberately not configured in this initial repository setup.
 
 ## Contact
 
