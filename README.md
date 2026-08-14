@@ -18,6 +18,8 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ```text
 .
 ├── README.md
+├── docs/
+│   └── cloudflare-pages.md  Intended Pages environments and release behavior
 └── www/
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
@@ -59,6 +61,8 @@ The deployment plan follows Cloudflare Pages' standard Git integration, with `ma
 2. At production cutover, `livingintelligence.xyz` is attached to the same Pages project and automatic production-branch deployments are disabled. A guarded, manually dispatched GitHub Actions workflow then deploys the selected `main` commit with Wrangler. The workflow will follow the `alexfili.pe` production release pattern: a typed `livingintelligence.xyz` confirmation, serialized deployment runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks. Preview deployments for pull requests and other branches can remain enabled.
 
 The workflow, Cloudflare project, DNS, redirects, and analytics are deliberately not configured in this initial repository setup.
+
+See [the Cloudflare Pages deployment plan](docs/cloudflare-pages.md) for the intended environments, production release gate, verification, and rollback behavior.
 
 ## Contact
 
