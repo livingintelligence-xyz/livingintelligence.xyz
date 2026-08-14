@@ -53,7 +53,10 @@ Before production launch, also verify the canonical URL, social preview, icon re
 
 ## Deployment
 
-The intended production host is Cloudflare Pages, with `main` as the release branch and `www/` as the deployable static site. Production deployment will use a guarded, manually dispatched GitHub Actions workflow modeled on the `alexfili.pe` production release: a typed `livingintelligence.xyz` confirmation, serialized deployment runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks. Ordinary pushes to `main` will not deploy the production website automatically.
+The deployment plan follows Cloudflare Pages' standard Git integration, with `main` as the production branch and `www/` as the deployable static site:
+
+1. Initially, automatic production deployments remain enabled and no custom domain is attached. Every push to `main` updates the project's Cloudflare-provided `*.pages.dev` site, matching the current Aetherloom and `alpha.alexfili.pe` behavior without introducing a Living Intelligence preview subdomain.
+2. At production cutover, `livingintelligence.xyz` is attached to the same Pages project and automatic production-branch deployments are disabled. A guarded, manually dispatched GitHub Actions workflow then deploys the selected `main` commit with Wrangler. The workflow will follow the `alexfili.pe` production release pattern: a typed `livingintelligence.xyz` confirmation, serialized deployment runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks. Preview deployments for pull requests and other branches can remain enabled.
 
 The workflow, Cloudflare project, DNS, redirects, and analytics are deliberately not configured in this initial repository setup.
 
