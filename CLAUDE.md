@@ -49,6 +49,8 @@ For scoped repository work, direct commits and pushes to `main` are allowed. Do 
 4. Push `main` directly.
 5. Verify that local `main`, `origin/main`, and the remote branch SHA agree.
 
+Always use the configured SSH remote for GitHub Git operations. Routine, scoped commits and pushes directly to `main` have standing user approval in this repository and do not require a separate per-push confirmation. Ask again only if the remote target changes or the proposed operation becomes destructive or materially broader than the requested repository work.
+
 Never force-push, rewrite public history, delete the repository, or remove deployed infrastructure as an automatic recovery action.
 
 Do not commit secrets, API tokens, credentials, private keys, account identifiers that are meant to remain private, or local environment files.
