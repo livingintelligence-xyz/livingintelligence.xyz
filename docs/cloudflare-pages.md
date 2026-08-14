@@ -50,7 +50,7 @@ Official references:
 
 State: **active**
 
-The Git-connected project was created on 2026-08-14. Its initial production deployment succeeded from `main` at commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`, and the assigned hostname serves the contents of `www/` over HTTPS. Automatic production deployments remain enabled for `main`.
+The Git-connected project was created on 2026-08-14. Its initial production deployment succeeded from `main` at commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`, and the assigned hostname serves the contents of `www/` over HTTPS. A later GitHub push at commit `f9a398cd0e2d48fda60dac2c63eecf0a79579758` triggered and completed a production deployment, verifying the automatic `main` deployment path.
 
 1. Give the Cloudflare Pages GitHub application access to this repository. Limit organization access to this repository when possible.
 2. Create the Git-connected Pages project using the configuration above.
@@ -163,7 +163,7 @@ As of the review date above:
 - The deployable static site is in `www/`.
 - The Git-connected Cloudflare Pages project `livingintelligence-xyz` exists and publishes `www/` from `main` to `https://livingintelligence-xyz.pages.dev`.
 - The initial production deployment succeeded and was reconciled to Git commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`.
-- Automatic production deployments and preview deployments are enabled. A later push to `main` must still be observed before treating automatic follow-up deployment behavior as verified.
+- Automatic production deployments and preview deployments are enabled. A GitHub push to `main` was observed triggering a successful production deployment.
 - The project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
 - An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
