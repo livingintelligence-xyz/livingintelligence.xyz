@@ -56,7 +56,7 @@ Official references:
 6. Verify that later pushes to `main` automatically update that URL.
 7. Confirm that pull requests or other included branches receive Cloudflare preview deployment URLs without affecting the production `*.pages.dev` deployment.
 
-During this phase, the Cloudflare-provided production URL is the only published website target. This matches the automatic Git-connected behavior used for Aetherloom and the `alpha.alexfili.pe` environment, but Living Intelligence will not add a custom alpha hostname.
+During this phase, the Cloudflare-provided production URL is the only published website target. Living Intelligence will not add a custom preview, staging, or alpha hostname.
 
 ## Phase 2: guarded production cutover
 
@@ -77,7 +77,7 @@ This order ensures that the first version exposed at `livingintelligence.xyz` wa
 
 ## Intended GitHub Actions release gate
 
-The future workflow should live at `.github/workflows/deploy-production.yml` and follow the established `alexfili.pe` production-release pattern:
+The future workflow should live at `.github/workflows/deploy-production.yml` and use a guarded manual production-release pattern:
 
 - Trigger only through `workflow_dispatch`.
 - Require a string input named `confirm` whose value must exactly equal `livingintelligence.xyz`.
@@ -137,7 +137,7 @@ After production cutover, verify at least:
 - `/site.webmanifest`, `/robots.txt`, `/sitemap.xml`, and `/assets/og-1200x627.png` return successful responses with appropriate content types.
 - The HTML canonical URL and Open Graph URL remain `https://livingintelligence.xyz/`.
 - The deployed source can be tied to the selected GitHub commit.
-- An unknown path follows the explicitly chosen 404 or redirect policy; do not add Aetherloom's unknown-path redirect behavior without a separate decision.
+- An unknown path follows the explicitly chosen 404 or redirect policy; do not add catch-all redirect behavior without a separate decision.
 
 Browser visual QA remains a user-run step unless explicitly requested in a future task.
 
