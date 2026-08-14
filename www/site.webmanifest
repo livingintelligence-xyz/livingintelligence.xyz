@@ -1,0 +1,15 @@
+{
+  "name": "Living Intelligence",
+  "short_name": "Living Intelligence",
+  "description": "Intelligence for living, that lives.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#0D0B09",
+  "theme_color": "#0D0B09",
+  "icons": [
+    { "src": "/assets/li-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/li-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/li-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

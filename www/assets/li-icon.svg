@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Living Intelligence">
+  <defs>
+    <linearGradient id="bgliicon" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#2A241D"></stop><stop offset="1" stop-color="#141110"></stop></linearGradient>
+    <linearGradient id="mkliicon" gradientUnits="userSpaceOnUse" x1="-80.60" y1="301.20" x2="270.70" y2="-49.10"><stop offset="0" stop-color="#A93415"></stop><stop offset="0.5" stop-color="#E4572E"></stop><stop offset="1" stop-color="#F5A623"></stop></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="229" fill="url(#bgliicon)"></rect>
+  <rect x="1" y="1" width="1022" height="1022" rx="228" fill="none" stroke="#FFFFFF" stroke-opacity="0.07"></rect>
+  <g transform="translate(345.76 291.55) scale(1.7489)">
+    <path d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63" fill="none" stroke="url(#mkliicon)" stroke-width="25" stroke-linecap="round"></path>
+  </g>
+</svg>

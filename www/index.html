@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Living Intelligence — Intelligence for living, that lives.</title>
+<meta name="description" content="Living Intelligence is an independent technology company in San Francisco, building intelligence that understands context and respects human agency." />
+<link rel="canonical" href="https://livingintelligence.xyz/" />
+<meta name="theme-color" content="#0D0B09" />
+<meta name="color-scheme" content="dark" />
+<meta name="application-name" content="Living Intelligence" />
+<meta name="apple-mobile-web-app-title" content="Living Intelligence" />
+<meta name="robots" content="index,follow" />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://livingintelligence.xyz/" />
+<meta property="og:site_name" content="Living Intelligence" />
+<meta property="og:title" content="Living Intelligence" />
+<meta property="og:description" content="Intelligence for living, that lives." />
+<meta property="og:image" content="https://livingintelligence.xyz/assets/og-1200x627.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="627" />
+<meta property="og:image:alt" content="Living Intelligence — Intelligence for living, that lives." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Living Intelligence" />
+<meta name="twitter:description" content="Intelligence for living, that lives." />
+<meta name="twitter:image" content="https://livingintelligence.xyz/assets/og-1200x627.png" />
+<meta name="twitter:image:alt" content="Living Intelligence — Intelligence for living, that lives." />
+
+<link rel="icon" href="/assets/li-icon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/li-icon-32.png" sizes="32x32" />
+<link rel="icon" href="/assets/li-icon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="/assets/li-icon-180.png" sizes="180x180" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono:wght@400&amp;display=swap" rel="stylesheet" />
+
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  :root{
+    --bg:#0D0B09; --fg:#F5F0E8; --fg-soft:#E8DDD0; --muted:#A8977F;
+    --line:rgba(245,240,232,.10); --line-2:rgba(245,240,232,.18);
+    --g1:#A93415; --g2:#E4572E; --g3:#F5A623;
+    --glow:rgba(228,87,46,.16);
+    --field:linear-gradient(158deg,#42362A 0%,#2B231B 26%,#191410 58%,#0B0908 82%,#030202 100%);
+    --wm:'IBM Plex Sans',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --mark:clamp(96px,11.5vw,142px);
+    --lk-dir:row; --lk-gap:clamp(20px,2.4vw,34px);
+    --wm-size:clamp(23px,3.3vw,43px); --wm-track:.16em;
+  }
+  body{
+    background:var(--bg); color:var(--fg); font-family:var(--body);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .page{position:relative;min-height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+  .field,.glow{position:absolute;pointer-events:none}
+  .field{inset:0;background:var(--field)}
+  .glow{
+    top:-14vh;left:50%;width:min(1100px,120vw);height:min(1100px,120vw);
+    transform:translateX(-50%);
+    background:radial-gradient(closest-side,var(--glow),transparent 72%);
+    animation:li-breathe 18s ease-in-out infinite;
+  }
+  main{
+    position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(28px,5vw,72px) clamp(24px,6vw,88px) clamp(20px,4vh,44px);
+    max-width:1180px;width:100%;margin:0 auto;
+  }
+  .hero{display:flex;flex-direction:column;gap:clamp(22px,3.4vh,34px)}
+  .lockup{display:flex;flex-direction:var(--lk-dir);align-items:center;gap:var(--lk-gap);animation:li-rise 1s cubic-bezier(.2,.7,.2,1) both}
+  .lockup svg{width:var(--mark);height:var(--mark);flex:none;overflow:visible}
+  .names{display:flex;flex-direction:column;gap:clamp(6px,.8vh,12px)}
+  h1{
+    margin:0;font-family:var(--wm);font-weight:500;text-transform:uppercase;
+    letter-spacing:var(--wm-track);font-size:var(--wm-size);line-height:1.02;color:var(--fg);
+  }
+  .motto{margin:0;font-size:clamp(17px,1.85vw,26px);letter-spacing:.005em;color:var(--fg-soft);opacity:.92;line-height:1.3;text-wrap:balance}
+  .thesis{margin:0;max-width:44ch;font-size:clamp(14px,1.2vw,17px);line-height:1.65;color:var(--fg-soft);text-wrap:pretty;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .18s both}
+  .work{display:flex;flex-direction:column;gap:11px;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .32s both}
+  .label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.75}
+  .work nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,2.6vw,34px);font-size:clamp(13px,1.15vw,15px)}
+  a{color:var(--fg-soft);text-decoration:none}
+  a:hover{color:var(--g3)}
+  a:focus-visible{outline:2px solid var(--g3);outline-offset:4px;border-radius:2px}
+  .work nav a,footer .who a{border-bottom:1px solid var(--line-2);padding-bottom:2px;transition:color .3s,border-color .3s}
+  .work nav a:hover,footer .who a:hover{border-color:var(--g3)}
+  footer{
+    position:relative;padding:clamp(22px,3vh,34px) clamp(24px,6vw,88px) clamp(26px,4vh,40px);
+    max-width:1180px;width:100%;margin:0 auto;display:flex;flex-wrap:wrap;
+    gap:16px clamp(24px,4vw,56px);align-items:baseline;justify-content:space-between;
+    border-top:1px solid var(--line);font-size:12.5px;line-height:1.5;color:var(--muted);
+    animation:li-fade 1.2s ease .5s both;
+  }
+  footer p{margin:0;font-family:var(--mono);letter-spacing:.02em}
+  .meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px clamp(16px,2vw,28px);font-family:var(--mono);letter-spacing:.02em}
+  .meta .c{color:var(--muted);opacity:.6}
+  @media (max-width:640px){
+    :root{--lk-dir:column;--lk-gap:22px;--mark:74px;--wm-size:clamp(19px,5.6vw,27px);--wm-track:.13em}
+    .lockup{align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    #heat{display:none}
+  }
+  @keyframes li-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes li-fade{from{opacity:0}to{opacity:1}}
+  @keyframes li-travel{
+    0%{stroke-dashoffset:1130;opacity:0}
+    6%{opacity:.95}
+    46%{stroke-dashoffset:130;opacity:.95}
+    54%{stroke-dashoffset:130;opacity:0}
+    100%{stroke-dashoffset:130;opacity:0}
+  }
+  @keyframes li-breathe{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+  #heat{animation:li-travel 13s cubic-bezier(.45,0,.55,1) 1.2s infinite;mix-blend-mode:screen}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="field"></div>
+  <div class="glow"></div>
+
+  <main>
+    <div class="hero">
+      <div class="lockup">
+        <svg viewBox="-80.6 -49.1 351.3 350.3" role="img" aria-label="Living Intelligence" fill="none">
+          <defs>
+            <linearGradient id="liHeat" gradientUnits="userSpaceOnUse" x1="-80.6" y1="301.2" x2="270.7" y2="-49.1">
+              <stop offset="0" stop-color="var(--g1)"></stop>
+              <stop offset="0.5" stop-color="var(--g2)"></stop>
+              <stop offset="1" stop-color="var(--g3)"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63" stroke="url(#liHeat)" stroke-width="25" stroke-linecap="round"></path>
+          <path id="heat" d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63" pathLength="1000" stroke="var(--g3)" stroke-width="25" stroke-linecap="round" stroke-dasharray="130 1000" stroke-dashoffset="1130" opacity="0"></path>
+        </svg>
+        <div class="names">
+          <h1>Living Intelligence</h1>
+          <p class="motto">Intelligence for living, that lives.</p>
+        </div>
+      </div>
+
+      <p class="thesis">Building intelligence that understands context and respects human agency.</p>
+
+      <div class="work">
+        <span class="label">Selected work</span>
+        <nav>
+          <a href="https://aetherloom.app" target="_blank" rel="noopener">Aetherloom</a>
+          <a href="https://alexfili.pe/projects/home-intelligence" target="_blank" rel="noopener">Home Intelligence</a>
+        </nav>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p class="who">An independent technology company by <a href="https://alexfili.pe" target="_blank" rel="noopener">Álex Filipe Santos</a> &nbsp;·&nbsp; San Francisco</p>
+    <div class="meta">
+      <a href="mailto:hello@livingintelligence.xyz">hello@livingintelligence.xyz</a>
+      <a href="https://github.com/livingintelligence-xyz" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/company/livingintelligence-xyz" target="_blank" rel="noopener">LinkedIn</a>
+      <span class="c">© 2026</span>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
