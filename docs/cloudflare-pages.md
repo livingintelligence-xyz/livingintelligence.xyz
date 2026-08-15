@@ -138,6 +138,7 @@ git diff --check
 It should also fail if any required deployment artifact is missing:
 
 - `www/index.html`
+- `www/404.html`
 - `www/_headers`
 - `www/robots.txt`
 - `www/site.webmanifest`
@@ -166,8 +167,8 @@ For every manually triggered domain release, verify at least:
 - `https://www.livingintelligence.xyz/` permanently redirects to the apex while preserving path and query data.
 - `/site.webmanifest`, `/robots.txt`, `/sitemap.xml`, and `/assets/og-1200x627.png` return successful responses with appropriate content types.
 - The HTML canonical URL and Open Graph URL remain `https://livingintelligence.xyz/`.
+- An unknown path returns the branded `www/404.html` page with HTTP `404`.
 - The deployed source can be tied to the selected GitHub commit.
-- An unknown path follows the explicitly chosen 404 or redirect policy; do not add catch-all redirect behavior without a separate decision.
 
 Browser visual QA remains a user-run step unless explicitly requested in a future task.
 
@@ -190,7 +191,7 @@ As of the review date above:
 - Automatic production deployments and preview deployments are enabled. A GitHub push to `main` was observed triggering a successful production deployment.
 - The continuous project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
-- An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
+- The deployable source includes a top-level `www/404.html`, preventing Cloudflare Pages from treating the static site as an SPA; production will return this page with HTTP `404` after the next manual domain release.
 - The separate Direct Upload project `livingintelligence-xyz-production` exists with production branch metadata set to `main` and no Git integration.
 - `.github/workflows/deploy-production.yml` provides the only production-project deployment path and pins Wrangler `4.123.0`.
 - The GitHub `production` environment exists without an approval rule and contains scoped `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` secrets.

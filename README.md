@@ -30,6 +30,7 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 │   └── build_social.py      Generates the broader social artwork kit
 └── www/
     ├── _headers            Host-specific crawler policy for Pages hostnames
+    ├── 404.html            Branded not-found response for unknown paths
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
     ├── robots.txt          Search crawler policy

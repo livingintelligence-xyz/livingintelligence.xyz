@@ -75,6 +75,7 @@ jobs:
 
           required_files=(
             www/index.html
+            www/404.html
             www/_headers
             www/robots.txt
             www/site.webmanifest
@@ -169,6 +170,12 @@ jobs:
             "$DEPLOYMENT_URL/" --output /tmp/deployed-index.html
           cmp --silent www/index.html /tmp/deployed-index.html
 
+          not_found_status="$(curl --silent --show-error --retry 5 --retry-all-errors \
+            --output /tmp/deployed-404.html --write-out '%{http_code}' \
+            "$DEPLOYMENT_URL/__not-found-check")"
+          test "$not_found_status" = "404"
+          cmp --silent www/404.html /tmp/deployed-404.html
+
           for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
             curl --fail --silent --show-error --retry 5 --retry-all-errors \
               "$DEPLOYMENT_URL/$path" --output /dev/null
@@ -197,6 +204,13 @@ jobs:
               curl --fail --silent --show-error --retry 5 --retry-all-errors \
                 "https://livingintelligence.xyz/$path" --output /dev/null
             done
+
+            production_not_found_status="$(curl --silent --show-error --retry 5 --retry-all-errors \
+              --output /tmp/production-404.html --write-out '%{http_code}' \
+              https://livingintelligence.xyz/__not-found-check)"
+            test "$production_not_found_status" = "404"
+            grep -Fq '<title>Page not found — Living Intelligence</title>' \
+              /tmp/production-404.html
 
             if curl --fail --silent --show-error --head https://livingintelligence.xyz/ |
               grep -qi '^x-robots-tag:.*noindex'; then
