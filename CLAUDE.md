@@ -83,15 +83,17 @@ Read `docs/cloudflare-pages.md` before changing hosting, deployment workflows, G
 
 The intended behavior is:
 
-- Initially, the Git-connected Cloudflare Pages project automatically deploys `main` to its Cloudflare-provided `*.pages.dev` URL.
+- The existing Git-connected Cloudflare Pages project automatically deploys every commit to `main` to `https://livingintelligence-xyz.pages.dev`, indefinitely.
+- Do not disable automatic production-branch deployments on that project during a production-domain release.
 - No custom preview, staging, or alpha subdomain is planned.
-- Before `livingintelligence.xyz` is attached, automatic production-branch deployments are disabled.
-- Production is then released only through a guarded, manually dispatched GitHub Actions workflow.
+- Never attach `livingintelligence.xyz` or `www.livingintelligence.xyz` to the automatic `pages.dev` project. Cloudflare Pages updates a project's production `pages.dev` URL and attached custom domains together.
+- The production custom domain uses a separate, non-Git-connected Pages project so domain releases remain independent from automatic `pages.dev` deployments.
+- Production-domain releases occur only through a manually dispatched GitHub Actions workflow. Any commit proven to belong to `main` is eligible; no separate cutoff or branch-control change is required.
 - Pull-request and non-production-branch preview deployments may remain enabled.
 
 The hosting plan is not proof of provider state. Before any deployment work, inspect the current GitHub workflow, Cloudflare Pages project, deployment history, custom domains, DNS records, and production response. Do not claim that a push deployed the website without deployment evidence.
 
-Do not create a second Pages project, attach a custom domain, add GitHub secrets, enable analytics, or deploy production unless the user explicitly asks for that state change.
+Do not create the separate production Pages project, attach a custom domain, add GitHub secrets, enable analytics, or deploy production unless the user explicitly asks for that state change.
 
 ## SEO
 

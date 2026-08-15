@@ -1,25 +1,27 @@
 # Cloudflare Pages deployment behavior
 
-Status: **Phase 1 active; Phase 2 release workflow specified, not implemented**
+Status: **Continuous `pages.dev` deployment active; independent domain release specified, not implemented**
 
-Last reviewed: **2026-08-14**
+Last reviewed: **2026-08-15**
 
-This document is the repository source of truth for the current initial Cloudflare Pages deployment and the intended production behavior for `livingintelligence.xyz`. Provider state can change independently, so future deployment work must still inspect the current GitHub, Cloudflare Pages, deployment, custom-domain, and DNS state before making changes.
+This document is the repository source of truth for the continuous Cloudflare Pages deployment and the intended production-domain behavior for `livingintelligence.xyz`. Provider state can change independently, so future deployment work must still inspect the current GitHub, Cloudflare Pages, deployment, custom-domain, and DNS state before making changes.
 
 ## Required behavior
 
-- Use one Cloudflare Pages project for both the Cloudflare-provided URL and the eventual production custom domain.
-- Initially, every push to `main` automatically deploys to the project's `*.pages.dev` URL through the standard Cloudflare Pages Git integration.
+- Keep the existing Git-connected Cloudflare Pages project dedicated to continuous `pages.dev` deployment.
+- Every push to `main` automatically deploys to `https://livingintelligence-xyz.pages.dev` through the standard Cloudflare Pages Git integration, indefinitely.
+- Never disable automatic production-branch deployments on the continuous project as part of a domain release.
 - Do not create a Living Intelligence preview or alpha custom subdomain.
-- Do not attach `livingintelligence.xyz` during the initial `*.pages.dev` phase.
-- Before attaching the production domain, disable automatic production-branch deployments.
-- After production cutover, deploy the Pages production environment only through a guarded, manually dispatched GitHub Actions workflow.
+- Do not attach `livingintelligence.xyz` or `www.livingintelligence.xyz` to the continuous project. A production-branch deployment updates both a Pages project's production `pages.dev` URL and any custom domains attached to that project.
+- Use a separate, non-Git-connected Pages project for the production custom domain.
+- Deploy the custom-domain project only through a manually dispatched GitHub Actions workflow.
+- Allow the workflow to deploy any commit verified as belonging to `main`; do not require a release branch, a production-branch cutoff, or a branch-control change.
 - Keep normal pull-request and non-production-branch preview deployments enabled unless there is a specific reason to restrict them.
-- Never treat a Git push, a successful preview deployment, or repository visibility as proof that `livingintelligence.xyz` changed.
+- Never treat a Git push to the continuous project, a successful preview deployment, or repository visibility as proof that `livingintelligence.xyz` changed.
 
-## Pages project configuration
+## Continuous `pages.dev` project
 
-The verified initial configuration is:
+The verified continuous-deployment configuration is:
 
 | Setting | Value |
 | --- | --- |
@@ -31,8 +33,8 @@ The verified initial configuration is:
 | Repository root | `/` |
 | Build command | Blank |
 | Build output directory | `www` |
-| Initial custom domains | None |
-| Initial automatic production deployments | Enabled |
+| Custom domains | None, permanently |
+| Automatic production deployments | Enabled permanently |
 | Preview deployments | Enabled |
 
 The website is dependency-free static HTML, CSS, SVG, JSON, XML, and image assets. It has no install or build step. Cloudflare should publish the contents of `www/` directly.
@@ -46,7 +48,22 @@ Official references:
 - [Custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/)
 - [Wrangler configuration for Pages](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
-## Phase 1: automatic `pages.dev` deployment
+## Future custom-domain project
+
+The production domain requires a distinct deployment target because Cloudflare Pages does not independently pin a custom domain while continuing to advance the same project's production `pages.dev` URL.
+
+| Setting | Planned value |
+| --- | --- |
+| Preferred project name | `livingintelligence-xyz-production` (verify availability before creation) |
+| Project type | Direct Upload; no Git integration |
+| Deployable source | `www/` from a selected commit belonging to `main` |
+| Automatic deployments | None |
+| Deployment method | Manually dispatched GitHub Actions workflow using Wrangler |
+| Custom domains | `livingintelligence.xyz`, then `www.livingintelligence.xyz` with a permanent apex redirect |
+
+The production project will also receive a Cloudflare-provided `pages.dev` hostname, but it is an implementation endpoint for manual release verification, not the continuously updated preview target or the canonical public origin.
+
+## Continuous `pages.dev` deployment
 
 State: **active**
 
@@ -60,40 +77,40 @@ The Git-connected project was created on 2026-08-14. Its initial production depl
 6. Verify that later pushes to `main` automatically update that URL.
 7. Confirm that pull requests or other included branches receive Cloudflare preview deployment URLs without affecting the production `*.pages.dev` deployment.
 
-During this phase, the Cloudflare-provided production URL is the only published website target. Living Intelligence will not add a custom preview, staging, or alpha hostname.
+This automatic deployment path remains active after the custom domain launches. Living Intelligence will not add a custom preview, staging, or alpha hostname.
 
-## Phase 2: guarded production cutover
+## Manually triggered custom-domain releases
 
-State: **specified and ready for later implementation; not configured**
+State: **specified; production project and workflow not configured**
 
-Use the same Pages project. Do not create a second production project.
+Use a separate Pages project. Never attach the custom domain to `livingintelligence-xyz`, because every automatic `main` deployment to that project would also update the domain.
 
-The safe cutover order is:
+The implementation order is:
 
-1. Add and validate the guarded GitHub Actions production workflow while no custom domain is attached.
-2. Configure a GitHub `production` environment with the least-privilege Cloudflare credentials required to deploy this Pages project.
-3. Disable automatic production-branch deployments in Cloudflare Pages. Leave desired preview-branch deployments enabled.
-4. Manually dispatch the workflow for the selected commit on `main`.
-5. Verify that the workflow deployed the intended commit to the project's production `*.pages.dev` URL.
-6. Attach `livingintelligence.xyz` to the Pages project.
+1. Confirm the exact name for the separate Direct Upload production project and create it without attaching a custom domain.
+2. Configure a GitHub `production` environment only to scope the least-privilege Cloudflare credentials required for that project; do not add an approval requirement unless the user requests one.
+3. Add and validate the manually dispatched GitHub Actions domain-release workflow.
+4. Dispatch the workflow for a selected commit and verify that the commit belongs to `main`.
+5. Verify that the workflow deployed the intended commit to the production project's Cloudflare-provided URL.
+6. Attach `livingintelligence.xyz` to the production project.
 7. Add `www.livingintelligence.xyz` and configure a permanent redirect to the apex that preserves the path and query string.
-8. Verify the apex, the `www` redirect, TLS, static assets, metadata, and the deployed commit.
+8. Verify the apex, the `www` redirect, TLS, static assets, metadata, and deployed commit.
 
-This order ensures that the first version exposed at `livingintelligence.xyz` was selected and deployed through the guarded workflow. After cutover, an ordinary push to `main` must not change the Pages production environment or the custom domain.
+There is no cutoff of the continuous `main` deployment path. After the domain launches, every push to `main` continues updating `livingintelligence-xyz.pages.dev`, while `livingintelligence.xyz` changes only after the domain-release action is manually dispatched.
 
 ## Intended GitHub Actions release gate
 
-The future workflow should live at `.github/workflows/deploy-production.yml` and use a guarded manual production-release pattern:
+The future workflow should live at `.github/workflows/deploy-production.yml` and use a manual domain-release pattern:
 
 - Trigger only through `workflow_dispatch`.
-- Require a string input named `confirm` whose value must exactly equal `livingintelligence.xyz`.
-- Run against the explicitly selected Git ref and record its full commit SHA.
-- Use a `production` environment in GitHub.
+- Require a commit input, resolve it to a full SHA, and fail unless that SHA belongs to the history of `origin/main`.
+- Permit any commit belonging to `main`, including an older known-good commit for rollback.
+- Use a `production` environment in GitHub to scope secrets, without an additional approval gate unless requested.
 - Serialize releases with a production concurrency group and `cancel-in-progress: false`.
 - Grant only the GitHub permissions required to read the repository and record the deployment.
 - Store the Cloudflare account ID and API token as GitHub environment secrets; never commit credentials.
 - Validate the static site before deployment.
-- Deploy `www/` to the existing Pages project with a pinned Wrangler version.
+- Deploy `www/` to the separate Direct Upload production project with a pinned Wrangler version.
 - Fail if the deployed commit cannot be reconciled with the selected GitHub SHA.
 - Run post-deploy HTTP verification and fail closed on an ambiguous or partial result.
 
@@ -101,7 +118,7 @@ The planned Wrangler operation is equivalent to:
 
 ```sh
 wrangler pages deploy www \
-  --project-name livingintelligence-xyz \
+  --project-name livingintelligence-xyz-production \
   --branch main \
   --commit-hash <selected-github-sha>
 ```
@@ -134,9 +151,9 @@ It should also fail if any required deployment artifact is missing:
 
 ## Post-deploy verification
 
-For the initial `pages.dev` phase, verify the assigned hostname rather than assuming the preferred project name was available.
+For the continuous deployment target, verify `https://livingintelligence-xyz.pages.dev` and reconcile its deployment to the latest pushed `main` commit.
 
-After production cutover, verify at least:
+For every manually triggered domain release, verify at least:
 
 - `https://livingintelligence.xyz/` returns the intended page over HTTPS.
 - `https://www.livingintelligence.xyz/` permanently redirects to the apex while preserving path and query data.
@@ -149,8 +166,8 @@ Browser visual QA remains a user-run step unless explicitly requested in a futur
 
 ## Rollback
 
-- Before custom-domain cutover, disable automatic deployments or disconnect the Git integration if a bad build repeatedly publishes to `*.pages.dev`.
-- For production, use Cloudflare Pages' previous known-good deployment or redeploy a known-good Git commit through the guarded workflow.
+- If a bad commit publishes to the continuous `pages.dev` project, fix or revert it on `main`; do not disable the standing automatic-deployment policy as a routine release step.
+- For the custom domain, redeploy a known-good commit belonging to `main` through the manual workflow.
 - If the custom domain or certificate is unhealthy, detach or redirect the domain only after confirming the exact DNS and Pages state.
 - Do not rewrite Git history, force-push, delete the Pages project, or delete DNS records as an automatic recovery action.
 - Report whether rollback restored only the Pages deployment, the custom domain, or both.
@@ -161,13 +178,13 @@ As of the review date above:
 
 - The public GitHub repository and `main` branch exist.
 - The deployable static site is in `www/`.
-- The Git-connected Cloudflare Pages project `livingintelligence-xyz` exists and publishes `www/` from `main` to `https://livingintelligence-xyz.pages.dev`.
+- The Git-connected Cloudflare Pages project `livingintelligence-xyz` exists and publishes `www/` from every `main` commit to `https://livingintelligence-xyz.pages.dev`.
 - The initial production deployment succeeded and was reconciled to Git commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`.
 - Automatic production deployments and preview deployments are enabled. A GitHub push to `main` was observed triggering a successful production deployment.
 - The project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
 - An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
-- No GitHub Actions deployment workflow has been added.
+- No separate Direct Upload production project or GitHub Actions domain-release workflow has been added.
 - No Cloudflare credentials or GitHub environment secrets have been configured by this repository setup work.
 - No DNS record or custom domain has been changed by this repository setup work.
 
