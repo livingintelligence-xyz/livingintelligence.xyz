@@ -228,7 +228,7 @@
   .work nav a{font-family:var(--body);font-weight:500}
   .work nav a,footer .who a{border-bottom:1px solid var(--line-2);padding-bottom:2px;transition:color .3s,border-color .3s}
   .work nav a:hover,footer .who a:hover{border-color:var(--g3)}
-  .work nav a::after{content:"↗";display:inline-block;margin-left:.32em;font-size:.85em;vertical-align:.18em}
+  .work nav a::after{content:"↗";display:inline-block;margin-left:.32em;font-size:.85em;vertical-align:.1em;}
   footer{
     position:relative;padding:clamp(22px,3vh,34px) clamp(24px,6vw,88px) clamp(26px,4vh,40px);
     max-width:1180px;width:100%;margin:0 auto;display:flex;flex-direction:column;
@@ -238,9 +238,9 @@
   }
   footer::before{content:"";position:absolute;top:0;left:50%;width:calc(100vw - 40px);height:1px;background:var(--line);transform:translateX(-50%)}
   footer p{margin:0;font-family:var(--mono);letter-spacing:.02em}
-  .meta{display:flex;align-items:baseline;font-family:var(--mono);letter-spacing:.02em}
+  .meta{display:flex;align-items:baseline;font-family:var(--mono);letter-spacing:.02em;white-space:nowrap}
   .socials{display:inline-flex;align-items:baseline}
-  .meta>.socials::before,.socials a+a::before{content:"/";margin:0 10px;color:var(--muted);opacity:.6}
+  .meta>.socials::before{content:"|";margin:0 14px;color:var(--muted);opacity:.6}
   @media (max-width:640px){
     :root{--lk-dir:column;--lk-gap:22px;--mark:86px;--wm-size:clamp(23px,5.6vw,27px);--wm-track:.13em}
     .lockup{align-items:flex-start}
@@ -249,13 +249,8 @@
     footer::before{left:clamp(24px,6vw,88px);right:clamp(24px,6vw,88px);width:auto;transform:none}
     .who-detail{display:block}
   }
-  @media (max-width:420px){
-    .meta{flex-wrap:wrap;gap:8px 10px}
-    .meta>.socials{flex-basis:100%}
-    .meta>.socials::before{content:none}
-  }
-  @media (max-height:760px) and (min-width:701px),
-    (max-height:640px) and (max-width:700px){
+  @media (max-height:640px) and (max-width:700px),
+    (max-height:560px) and (min-width:701px){
     html,body{overflow-x:hidden;overflow-y:auto}
     main{justify-content:flex-start}
   }
@@ -345,7 +340,6 @@
     <div class="meta">
       <a class="email" href="mailto:hello@livingintelligence.xyz">hello@livingintelligence.xyz</a>
       <span class="socials">
-        <a href="https://github.com/livingintelligence-xyz" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/company/livingintelligence-xyz" target="_blank" rel="noopener">LinkedIn</a>
       </span>
     </div>
