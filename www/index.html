@@ -19,7 +19,7 @@
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content="https://livingintelligence.xyz/" />
 <meta property="og:site_name" content="Living Intelligence" />
-<meta property="og:title" content="Living Intelligence — Intelligence for living, that lives." />
+<meta property="og:title" content="Living Intelligence — Technology Studio in San Francisco" />
 <meta property="og:description" content="Intelligence you can trust carries the ordinary things, leaving you free for the choices only you can make. An independent technology studio in San Francisco." />
 <meta property="og:image" content="https://livingintelligence.xyz/assets/og-1200x627.png?v=20260815" />
 <meta property="og:image:secure_url" content="https://livingintelligence.xyz/assets/og-1200x627.png?v=20260815" />
@@ -28,7 +28,7 @@
 <meta property="og:image:height" content="627" />
 <meta property="og:image:alt" content="Living Intelligence logo and the words “Intelligence for living, that lives.” on a warm dark background." />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Living Intelligence — Intelligence for living, that lives." />
+<meta name="twitter:title" content="Living Intelligence — Technology Studio in San Francisco" />
 <meta name="twitter:description" content="Intelligence you can trust carries the ordinary things, leaving you free for the choices only you can make. An independent technology studio in San Francisco." />
 <meta name="twitter:image" content="https://livingintelligence.xyz/assets/og-1200x627.png?v=20260815" />
 <meta name="twitter:image:alt" content="Living Intelligence logo and the words “Intelligence for living, that lives.” on a warm dark background." />
@@ -160,7 +160,7 @@
 
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  html,body{margin:0;padding:0;overflow:hidden}
   :root{
     --bg:#0D0B09; --fg:#F5F0E8; --fg-soft:#E8DDD0; --muted:#A8977F;
     --line:rgba(245,240,232,.10); --line-2:rgba(245,240,232,.18);
@@ -237,6 +237,11 @@
     .meta{flex-wrap:wrap;gap:8px 10px}
     .meta>.socials{flex-basis:100%}
     .meta>.socials::before{content:none}
+  }
+  @media (max-height:760px) and (min-width:701px),
+    (max-height:640px) and (max-width:700px){
+    html,body{overflow-x:hidden;overflow-y:auto}
+    main{justify-content:flex-start}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
