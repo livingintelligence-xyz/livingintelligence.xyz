@@ -10,6 +10,7 @@ This document is the repository source of truth for the continuous Cloudflare Pa
 
 - Keep the existing Git-connected Cloudflare Pages project dedicated to continuous `pages.dev` deployment.
 - Every push to `main` automatically deploys to `https://livingintelligence-xyz.pages.dev` through the standard Cloudflare Pages Git integration, indefinitely.
+- Do not use Cloudflare Pages build-skip commit-message prefixes on `main`; every commit must trigger a deployment.
 - Never disable automatic production-branch deployments on the continuous project as part of a domain release.
 - Do not create a Living Intelligence preview or alpha custom subdomain.
 - Do not attach `livingintelligence.xyz` or `www.livingintelligence.xyz` to the continuous project. A production-branch deployment updates both a Pages project's production `pages.dev` URL and any custom domains attached to that project.

@@ -84,6 +84,7 @@ Read `docs/cloudflare-pages.md` before changing hosting, deployment workflows, G
 The intended behavior is:
 
 - The existing Git-connected Cloudflare Pages project automatically deploys every commit to `main` to `https://livingintelligence-xyz.pages.dev`, indefinitely.
+- Do not use Cloudflare Pages build-skip commit-message prefixes on `main`; every commit must trigger the continuous deployment.
 - Do not disable automatic production-branch deployments on that project during a production-domain release.
 - No custom preview, staging, or alpha subdomain is planned.
 - Never attach `livingintelligence.xyz` or `www.livingintelligence.xyz` to the automatic `pages.dev` project. Cloudflare Pages updates a project's production `pages.dev` URL and attached custom domains together.
