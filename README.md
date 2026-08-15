@@ -54,7 +54,7 @@ python3 -m http.server 8000 --directory www
 
 Then open `http://localhost:8000/`.
 
-The page currently loads IBM Plex Sans and IBM Plex Mono from Google Fonts. Self-hosting those font files is a possible follow-up if eliminating that runtime dependency becomes a launch requirement.
+The page self-hosts IBM Plex Sans and IBM Plex Mono as WOFF2 files under `www/assets/fonts/`. Their SIL Open Font License is stored alongside the font files. No font request leaves the site at runtime.
 
 ## Validate
 
