@@ -1,0 +1,219 @@
+name: Deploy production domain
+
+run-name: Deploy ${{ inputs.commit }} to livingintelligence.xyz
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Commit SHA or ref from main to deploy
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-domain
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy selected main commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://livingintelligence.xyz
+
+    steps:
+      - name: Check out main history
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve a commit belonging to main
+        id: commit
+        env:
+          REQUESTED_COMMIT: ${{ inputs.commit }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          sha="$(git rev-parse --verify --end-of-options "${REQUESTED_COMMIT}^{commit}")"
+
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "Refusing to deploy $sha because it does not belong to main." >&2
+            exit 1
+          fi
+
+          {
+            echo "sha=$sha"
+            echo "message<<COMMIT_MESSAGE"
+            git log -1 --format=%s "$sha"
+            echo "COMMIT_MESSAGE"
+          } >> "$GITHUB_OUTPUT"
+
+          git checkout --detach "$sha"
+          test -z "$(git status --porcelain)"
+
+      - name: Validate static site
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq empty www/site.webmanifest
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+
+          ET.parse("www/sitemap.xml")
+          ET.parse("www/assets/li-icon.svg")
+          PY
+          git diff --check
+
+          required_files=(
+            www/index.html
+            www/_headers
+            www/robots.txt
+            www/site.webmanifest
+            www/sitemap.xml
+            www/favicon.ico
+            www/apple-touch-icon.png
+            www/assets/li-icon.svg
+            www/assets/li-icon-16.png
+            www/assets/li-icon-32.png
+            www/assets/li-icon-180.png
+            www/assets/li-icon-192.png
+            www/assets/li-icon-512.png
+            www/assets/li-icon-maskable-192.png
+            www/assets/li-icon-maskable-512.png
+            www/assets/living-intelligence-logo.png
+            www/assets/og-1200x627.png
+            www/assets/safari-pinned-tab.svg
+          )
+
+          for required_file in "${required_files[@]}"; do
+            test -f "$required_file"
+          done
+
+          grep -Fq '<link rel="canonical" href="https://livingintelligence.xyz/">' www/index.html
+          grep -Fq '<meta property="og:url" content="https://livingintelligence.xyz/">' www/index.html
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24.11.1
+          package-manager-cache: false
+
+      - name: Deploy selected commit
+        id: deployment
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+          COMMIT_MESSAGE: ${{ steps.commit.outputs.message }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          npx --yes wrangler@4.123.0 pages deploy www \
+            --project-name livingintelligence-xyz-production \
+            --branch main \
+            --commit-hash "$COMMIT_SHA" \
+            --commit-message "$COMMIT_MESSAGE"
+
+          deployment=""
+          for attempt in {1..12}; do
+            response="$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/livingintelligence-xyz-production/deployments")"
+
+            deployment="$(jq --arg sha "$COMMIT_SHA" \
+              '[.result[] | select(.environment == "production" and .deployment_trigger.metadata.commit_hash == $sha)] | sort_by(.created_on) | last // empty' \
+              <<< "$response")"
+
+            if [ -n "$deployment" ]; then
+              status="$(jq -r '.latest_stage.status' <<< "$deployment")"
+              if [ "$status" = "success" ]; then
+                break
+              fi
+              if [ "$status" = "failure" ]; then
+                echo "Cloudflare reported a failed deployment." >&2
+                exit 1
+              fi
+            fi
+
+            sleep 5
+          done
+
+          if [ -z "$deployment" ] || [ "$(jq -r '.latest_stage.status' <<< "$deployment")" != "success" ]; then
+            echo "Could not reconcile a successful deployment to $COMMIT_SHA." >&2
+            exit 1
+          fi
+
+          echo "url=$(jq -r '.url' <<< "$deployment")" >> "$GITHUB_OUTPUT"
+          echo "id=$(jq -r '.id' <<< "$deployment")" >> "$GITHUB_OUTPUT"
+
+      - name: Verify deployed responses
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deployment.outputs.url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          curl --fail --silent --show-error --retry 5 --retry-all-errors \
+            "$DEPLOYMENT_URL/" --output /tmp/deployed-index.html
+          cmp --silent www/index.html /tmp/deployed-index.html
+
+          for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
+            curl --fail --silent --show-error --retry 5 --retry-all-errors \
+              "$DEPLOYMENT_URL/$path" --output /dev/null
+          done
+
+          project="$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/livingintelligence-xyz-production")"
+
+          if jq -e '.result.domains | index("livingintelligence.xyz")' <<< "$project" > /dev/null; then
+            curl --fail --silent --show-error --retry 10 --retry-all-errors \
+              https://livingintelligence.xyz/ --output /tmp/production-index.html
+            cmp --silent www/index.html /tmp/production-index.html
+
+            for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
+              curl --fail --silent --show-error --retry 5 --retry-all-errors \
+                "https://livingintelligence.xyz/$path" --output /dev/null
+            done
+
+            if curl --fail --silent --show-error --head https://livingintelligence.xyz/ |
+              grep -qi '^x-robots-tag:.*noindex'; then
+              echo "The production domain must not return X-Robots-Tag: noindex." >&2
+              exit 1
+            fi
+
+            redirect_headers="$(curl --silent --show-error --head \
+              'https://www.livingintelligence.xyz/__redirect-check?source=workflow')"
+            grep -q '^HTTP/.* 301 ' <<< "$redirect_headers"
+            grep -qi '^location: https://livingintelligence.xyz/__redirect-check?source=workflow' <<< "$redirect_headers"
+          else
+            echo "Custom domain is not attached yet; provider deployment verification passed."
+          fi
+
+      - name: Summarize deployment
+        env:
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+          DEPLOYMENT_ID: ${{ steps.deployment.outputs.id }}
+          DEPLOYMENT_URL: ${{ steps.deployment.outputs.url }}
+        shell: bash
+        run: |
+          {
+            echo "## Production deployment"
+            echo
+            echo "- Commit: `$COMMIT_SHA`"
+            echo "- Cloudflare deployment: `$DEPLOYMENT_ID`"
+            echo "- Provider URL: $DEPLOYMENT_URL"
+            echo "- Production URL: https://livingintelligence.xyz"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -10,7 +10,7 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 
 - The initial landing page and brand assets are ready in `www/`.
 - The Git-connected Cloudflare Pages project is active at [livingintelligence-xyz.pages.dev](https://livingintelligence-xyz.pages.dev/), with `main` publishing `www/` automatically.
-- No separate production Pages project, custom domain, production DNS, analytics, or manually dispatched domain-release workflow is configured yet.
+- The separate Direct Upload production project and manually dispatched domain-release workflow are configured. The custom domain and production DNS are not attached yet.
 - The LinkedIn URL in the page is provisional and should be confirmed before launch.
 - No open-source license has been selected. Public visibility does not grant permission to reuse the source or brand assets.
 
@@ -21,12 +21,15 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ├── AGENTS.md              Repository instructions for coding agents
 ├── CLAUDE.md              Mirror of AGENTS.md for compatible tools
 ├── README.md
+├── .github/workflows/
+│   └── deploy-production.yml  Manual production-domain release workflow
 ├── docs/
 │   └── cloudflare-pages.md  Intended Pages environments and release behavior
 ├── scripts/
 │   ├── build_og.py          Generates the Open Graph SVG and PNG artwork
 │   └── build_social.py      Generates the broader social artwork kit
 └── www/
+    ├── _headers            Host-specific crawler policy for Pages hostnames
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
     ├── robots.txt          Search crawler policy
@@ -68,9 +71,9 @@ Before production launch, also verify the canonical URL, social preview, icon re
 The deployment policy uses two independent Cloudflare Pages targets, with `www/` as the deployable static site:
 
 1. The existing Git-connected project automatically publishes every commit to `main` at [livingintelligence-xyz.pages.dev](https://livingintelligence-xyz.pages.dev/). That automation stays enabled permanently, including after the custom domain launches.
-2. A future separate Pages project will serve `livingintelligence.xyz` and will not use Git-triggered deployments. A manually dispatched GitHub Actions workflow may deploy any commit verified as belonging to `main`, using Wrangler, serialized runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks.
+2. The separate Direct Upload project `livingintelligence-xyz-production` will serve `livingintelligence.xyz` and does not use Git-triggered deployments. The manually dispatched GitHub Actions workflow may deploy any commit verified as belonging to `main`, using Wrangler, serialized runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks.
 
-The automatic `pages.dev` project is active. The independent custom-domain project and its manual release workflow are specified but remain unimplemented; DNS, redirects, custom domains, and analytics are not configured.
+Both deployment paths are configured independently. The production domain, DNS, and `www` redirect remain to be activated; analytics is not configured.
 
 See [the Cloudflare Pages deployment plan](docs/cloudflare-pages.md) for the independent deployment targets, manual domain-release workflow, verification, and rollback behavior.
 

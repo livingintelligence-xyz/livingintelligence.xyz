@@ -1,6 +1,6 @@
 # Cloudflare Pages deployment behavior
 
-Status: **Continuous `pages.dev` deployment active; independent domain release specified, not implemented**
+Status: **Continuous `pages.dev` deployment active; independent production project and manual release workflow configured**
 
 Last reviewed: **2026-08-15**
 
@@ -49,18 +49,19 @@ Official references:
 - [Custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/)
 - [Wrangler configuration for Pages](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
-## Future custom-domain project
+## Production custom-domain project
 
 The production domain requires a distinct deployment target because Cloudflare Pages does not independently pin a custom domain while continuing to advance the same project's production `pages.dev` URL.
 
-| Setting | Planned value |
+| Setting | Value |
 | --- | --- |
-| Preferred project name | `livingintelligence-xyz-production` (verify availability before creation) |
+| Project name | `livingintelligence-xyz-production` |
+| Provider URL | `https://livingintelligence-xyz-production.pages.dev` |
 | Project type | Direct Upload; no Git integration |
 | Deployable source | `www/` from a selected commit belonging to `main` |
 | Automatic deployments | None |
 | Deployment method | Manually dispatched GitHub Actions workflow using Wrangler |
-| Custom domains | `livingintelligence.xyz`, then `www.livingintelligence.xyz` with a permanent apex redirect |
+| Custom domains | None yet; `livingintelligence.xyz` is the intended attachment |
 
 The production project will also receive a Cloudflare-provided `pages.dev` hostname, but it is an implementation endpoint for manual release verification, not the continuously updated preview target or the canonical public origin.
 
@@ -82,7 +83,7 @@ This automatic deployment path remains active after the custom domain launches. 
 
 ## Manually triggered custom-domain releases
 
-State: **specified; production project and workflow not configured**
+State: **project, GitHub environment, scoped secrets, and workflow configured; first deployment and domain activation pending**
 
 Use a separate Pages project. Never attach the custom domain to `livingintelligence-xyz`, because every automatic `main` deployment to that project would also update the domain.
 
@@ -99,9 +100,9 @@ The implementation order is:
 
 There is no cutoff of the continuous `main` deployment path. After the domain launches, every push to `main` continues updating `livingintelligence-xyz.pages.dev`, while `livingintelligence.xyz` changes only after the domain-release action is manually dispatched.
 
-## Intended GitHub Actions release gate
+## GitHub Actions release workflow
 
-The future workflow should live at `.github/workflows/deploy-production.yml` and use a manual domain-release pattern:
+The workflow lives at `.github/workflows/deploy-production.yml` and uses a manual domain-release pattern:
 
 - Trigger only through `workflow_dispatch`.
 - Require a commit input, resolve it to a full SHA, and fail unless that SHA belongs to the history of `origin/main`.
@@ -115,7 +116,7 @@ The future workflow should live at `.github/workflows/deploy-production.yml` and
 - Fail if the deployed commit cannot be reconciled with the selected GitHub SHA.
 - Run post-deploy HTTP verification and fail closed on an ambiguous or partial result.
 
-The planned Wrangler operation is equivalent to:
+The pinned Wrangler operation is equivalent to:
 
 ```sh
 wrangler pages deploy www \
@@ -124,21 +125,20 @@ wrangler pages deploy www \
   --commit-hash <selected-github-sha>
 ```
 
-Confirm the final project name before authoring the workflow. If Cloudflare assigns a different project name, use the provider's exact project name everywhere rather than silently creating another project.
-
 ## Pre-deploy validation
 
 At minimum, the workflow should verify:
 
 ```sh
 jq empty www/site.webmanifest
-xmllint --noout www/sitemap.xml www/assets/li-icon.svg
+python3 -c 'import xml.etree.ElementTree as ET; ET.parse("www/sitemap.xml"); ET.parse("www/assets/li-icon.svg")'
 git diff --check
 ```
 
 It should also fail if any required deployment artifact is missing:
 
 - `www/index.html`
+- `www/_headers`
 - `www/robots.txt`
 - `www/site.webmanifest`
 - `www/sitemap.xml`
@@ -191,8 +191,10 @@ As of the review date above:
 - The project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
 - An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
-- No separate Direct Upload production project or GitHub Actions domain-release workflow has been added.
-- No Cloudflare credentials or GitHub environment secrets have been configured by this repository setup work.
+- The separate Direct Upload project `livingintelligence-xyz-production` exists with production branch metadata set to `main` and no Git integration.
+- `.github/workflows/deploy-production.yml` provides the only production-project deployment path and pins Wrangler `4.123.0`.
+- The GitHub `production` environment exists without an approval rule and contains scoped `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` secrets.
+- The provider-specific Pages hostnames receive `X-Robots-Tag: noindex` from `www/_headers`; this rule does not match the production custom domain.
 - No DNS record or custom domain has been changed by this repository setup work.
 
 Future agents must re-verify every provider-side status item before implementation because this section can become stale.

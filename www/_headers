@@ -1,0 +1,11 @@
+https://livingintelligence-xyz.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:deployment.livingintelligence-xyz.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://livingintelligence-xyz-production.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:deployment.livingintelligence-xyz-production.pages.dev/*
+  X-Robots-Tag: noindex
