@@ -37,7 +37,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono:wght@400&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
 
 <style>
   *{box-sizing:border-box}
@@ -79,15 +79,16 @@
   .names{display:flex;flex-direction:column;gap:clamp(6px,.8vh,12px)}
   h1{
     margin:0;font-family:var(--wm);font-weight:500;text-transform:uppercase;
-    letter-spacing:var(--wm-track);font-size:var(--wm-size);line-height:1.02;color:var(--fg);
+    letter-spacing:.15em;font-size:var(--wm-size);line-height:1.02;color:var(--fg);
   }
-  .motto{margin:0;font-size:clamp(17px,1.85vw,26px);letter-spacing:.005em;color:var(--fg-soft);opacity:.92;line-height:1.3;text-wrap:balance}
-  .thesis{margin:0;max-width:44ch;font-size:clamp(16px,1.45vw,20px);line-height:1.6;color:var(--fg-soft);text-wrap:pretty;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .18s both}
+  .motto{margin:0;font-size:clamp(20px,2vw,26px);letter-spacing:.005em;color:var(--fg-soft);opacity:.92;line-height:1.3;text-wrap:balance}
+  .thesis{margin:0;max-width:44ch;font-size:clamp(16px,1.45vw,20px);letter-spacing:.005em;line-height:1.6;color:var(--fg-soft);text-wrap:pretty;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .18s both}
   .work{animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .32s both}
   .work nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,2.6vw,34px);font-size:clamp(13px,1.15vw,15px)}
   a{color:var(--fg-soft);text-decoration:none}
   a:hover{color:var(--g3)}
   a:focus-visible{outline:2px solid var(--g3);outline-offset:4px;border-radius:2px}
+  .work nav a{font-family:var(--sans);font-weight:500}
   .work nav a,footer .who a{border-bottom:1px solid var(--line-2);padding-bottom:2px;transition:color .3s,border-color .3s}
   .work nav a:hover,footer .who a:hover{border-color:var(--g3)}
   .work nav a::after{content:"↗";display:inline-block;margin-left:.32em;font-size:.85em;vertical-align:.18em}
@@ -104,6 +105,8 @@
   @media (max-width:640px){
     :root{--lk-dir:column;--lk-gap:22px;--mark:74px;--wm-size:clamp(19px,5.6vw,27px);--wm-track:.13em}
     .lockup{align-items:flex-start}
+    .thesis{margin-block:clamp(11px,1.7vh,17px)}
+    .who-detail{display:block}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
@@ -111,15 +114,21 @@
   }
   @keyframes li-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @keyframes li-fade{from{opacity:0}to{opacity:1}}
-  @keyframes li-travel{
-    0%{stroke-dashoffset:1130;opacity:0}
-    6%{opacity:.95}
-    46%{stroke-dashoffset:130;opacity:.95}
-    54%{stroke-dashoffset:130;opacity:0}
-    100%{stroke-dashoffset:130;opacity:0}
+@keyframes li-travel{
+  0%{stroke-dashoffset:var(--heat-enter)}
+    43.27%{stroke-dashoffset:var(--heat-exit)}
+    100%{stroke-dashoffset:var(--heat-exit)}
+  }
+  @keyframes li-ray-fade{
+    0%{opacity:0}
+    3.08%{opacity:1}
+    43.27%{opacity:1}
+    43.28%{opacity:0}
+    100%{opacity:0}
   }
   @keyframes li-breathe{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
-  #heat{animation:li-travel 13s cubic-bezier(.45,0,.55,1) 1.2s infinite;mix-blend-mode:screen}
+#heat{opacity:0;mix-blend-mode:screen;animation:li-ray-fade 10.4s ease-in-out 3s infinite}
+.heat-layer{opacity:var(--heat-opacity);animation:li-travel 10.4s cubic-bezier(.78,.45,.22,.62) 3s infinite}
 </style>
 </head>
 <body>
@@ -137,9 +146,28 @@
               <stop offset="0.5" stop-color="var(--g2)"></stop>
               <stop offset="1" stop-color="var(--g3)"></stop>
             </linearGradient>
+            <path id="liPath" pathLength="1000" d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63"></path>
           </defs>
-          <path d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63" stroke="url(#liHeat)" stroke-width="25" stroke-linecap="round"></path>
-          <path id="heat" d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63" pathLength="1000" stroke="var(--g3)" stroke-width="25" stroke-linecap="round" stroke-dasharray="130 1000" stroke-dashoffset="1130" opacity="0"></path>
+          <use href="#liPath" stroke="url(#liHeat)" stroke-width="25" stroke-linecap="round"></use>
+          <g id="heat" stroke="var(--g3)" stroke-width="25" stroke-linecap="round">
+            <use class="heat-layer" href="#liPath" stroke-dasharray="230 2000" stroke-dashoffset="2345" opacity="0" style="--heat-enter:2460;--heat-exit:1085;--heat-opacity:.012"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="220 2000" stroke-dashoffset="2330" opacity="0" style="--heat-enter:2445;--heat-exit:1070;--heat-opacity:.015"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="210 2000" stroke-dashoffset="2315" opacity="0" style="--heat-enter:2430;--heat-exit:1055;--heat-opacity:.02"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="200 2000" stroke-dashoffset="2300" opacity="0" style="--heat-enter:2415;--heat-exit:1040;--heat-opacity:.028"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="190 2000" stroke-dashoffset="2285" opacity="0" style="--heat-enter:2400;--heat-exit:1025;--heat-opacity:.04"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="180 2000" stroke-dashoffset="2270" opacity="0" style="--heat-enter:2385;--heat-exit:1010;--heat-opacity:.042"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="170 2000" stroke-dashoffset="2255" opacity="0" style="--heat-enter:2370;--heat-exit:995;--heat-opacity:.055"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="160 2000" stroke-dashoffset="2240" opacity="0" style="--heat-enter:2355;--heat-exit:980;--heat-opacity:.081"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="150 2000" stroke-dashoffset="2225" opacity="0" style="--heat-enter:2340;--heat-exit:965;--heat-opacity:.113"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="140 2000" stroke-dashoffset="2210" opacity="0" style="--heat-enter:2325;--heat-exit:950;--heat-opacity:.155"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="130 2000" stroke-dashoffset="2195" opacity="0" style="--heat-enter:2310;--heat-exit:935;--heat-opacity:.217"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="120 2000" stroke-dashoffset="2180" opacity="0" style="--heat-enter:2295;--heat-exit:920;--heat-opacity:.255"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="110 2000" stroke-dashoffset="2165" opacity="0" style="--heat-enter:2280;--heat-exit:905;--heat-opacity:.286"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="100 2000" stroke-dashoffset="2150" opacity="0" style="--heat-enter:2265;--heat-exit:890;--heat-opacity:.32"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="90 2000" stroke-dashoffset="2135" opacity="0" style="--heat-enter:2250;--heat-exit:875;--heat-opacity:.353"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="80 2000" stroke-dashoffset="2120" opacity="0" style="--heat-enter:2235;--heat-exit:860;--heat-opacity:.364"></use>
+            <use class="heat-layer" href="#liPath" stroke-dasharray="70 2000" stroke-dashoffset="2105" opacity="0" style="--heat-enter:2220;--heat-exit:845;--heat-opacity:.85"></use>
+          </g>
         </svg>
         <div class="names">
           <h1>Living Intelligence</h1>
@@ -159,7 +187,7 @@
   </main>
 
   <footer>
-    <p class="who">An independent technology studio by <a href="https://alexfili.pe" target="_blank" rel="noopener">Álex Filipe Santos</a> &nbsp;·&nbsp; San Francisco</p>
+    <p class="who">An independent technology studio by <span class="who-detail"><a href="https://alexfili.pe" target="_blank" rel="noopener">Álex Filipe Santos</a> &nbsp;·&nbsp; San Francisco</span></p>
     <div class="meta">
       <a href="mailto:hello@livingintelligence.xyz">hello@livingintelligence.xyz</a>
       <a href="https://github.com/livingintelligence-xyz" target="_blank" rel="noopener">GitHub</a>
