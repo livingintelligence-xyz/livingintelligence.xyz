@@ -156,6 +156,12 @@ It should also fail if any required deployment artifact is missing:
 - `www/assets/living-intelligence-logo.png`
 - `www/assets/og-1200x627.png`
 - `www/assets/safari-pinned-tab.svg`
+- `www/assets/fonts/fonts.css`
+- `www/assets/fonts/ibm-plex-sans-400.woff2`
+- `www/assets/fonts/ibm-plex-sans-500.woff2`
+- `www/assets/fonts/ibm-plex-mono-400.woff2`
+- `www/assets/fonts/ibm-plex-mono-500.woff2`
+- `www/assets/fonts/LICENSE.txt`
 
 ## Post-deploy verification
 
@@ -165,7 +171,7 @@ For every manually triggered domain release, verify at least:
 
 - `https://livingintelligence.xyz/` returns the intended page over HTTPS.
 - `https://www.livingintelligence.xyz/` permanently redirects to the apex while preserving path and query data.
-- `/site.webmanifest`, `/robots.txt`, `/sitemap.xml`, and `/assets/og-1200x627.png` return successful responses with appropriate content types.
+- `/site.webmanifest`, `/robots.txt`, `/sitemap.xml`, `/assets/og-1200x627.png`, the local font stylesheet, and every referenced WOFF2 file return successful responses with appropriate content types.
 - The HTML canonical URL and Open Graph URL remain `https://livingintelligence.xyz/`.
 - An unknown path returns the branded `www/404.html` page with HTTP `404`.
 - The deployed source can be tied to the selected GitHub commit.

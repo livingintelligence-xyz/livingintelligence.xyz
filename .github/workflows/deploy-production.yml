@@ -93,6 +93,12 @@ jobs:
             www/assets/living-intelligence-logo.png
             www/assets/og-1200x627.png
             www/assets/safari-pinned-tab.svg
+            www/assets/fonts/fonts.css
+            www/assets/fonts/ibm-plex-sans-400.woff2
+            www/assets/fonts/ibm-plex-sans-500.woff2
+            www/assets/fonts/ibm-plex-mono-400.woff2
+            www/assets/fonts/ibm-plex-mono-500.woff2
+            www/assets/fonts/LICENSE.txt
           )
 
           for required_file in "${required_files[@]}"; do
@@ -101,6 +107,14 @@ jobs:
 
           grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/"[[:space:]]*/?>' www/index.html
           grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/"[[:space:]]*/?>' www/index.html
+          grep -Fq '<link rel="stylesheet" href="/assets/fonts/fonts.css" />' www/index.html
+          grep -Fq '<link rel="stylesheet" href="/assets/fonts/fonts.css" />' www/404.html
+
+          if grep -REq 'fonts\.(googleapis|gstatic)\.com' www \
+            --include='*.html' --include='*.css'; then
+            echo "External Google Fonts references are not allowed." >&2
+            exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
@@ -176,7 +190,16 @@ jobs:
           test "$not_found_status" = "404"
           cmp --silent www/404.html /tmp/deployed-404.html
 
-          for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
+          for path in \
+            site.webmanifest \
+            robots.txt \
+            sitemap.xml \
+            assets/og-1200x627.png \
+            assets/fonts/fonts.css \
+            assets/fonts/ibm-plex-sans-400.woff2 \
+            assets/fonts/ibm-plex-sans-500.woff2 \
+            assets/fonts/ibm-plex-mono-400.woff2 \
+            assets/fonts/ibm-plex-mono-500.woff2; do
             curl --fail --silent --show-error --retry 5 --retry-all-errors \
               "$DEPLOYMENT_URL/$path" --output /dev/null
           done
@@ -200,7 +223,16 @@ jobs:
               /tmp/production-index.html
             grep -Fq 'Intelligence for living, that lives.' /tmp/production-index.html
 
-            for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
+            for path in \
+              site.webmanifest \
+              robots.txt \
+              sitemap.xml \
+              assets/og-1200x627.png \
+              assets/fonts/fonts.css \
+              assets/fonts/ibm-plex-sans-400.woff2 \
+              assets/fonts/ibm-plex-sans-500.woff2 \
+              assets/fonts/ibm-plex-mono-400.woff2 \
+              assets/fonts/ibm-plex-mono-500.woff2; do
               curl --fail --silent --show-error --retry 5 --retry-all-errors \
                 "https://livingintelligence.xyz/$path" --output /dev/null
             done
