@@ -1,6 +1,6 @@
 # Cloudflare Pages deployment behavior
 
-Status: **Continuous `pages.dev` deployment active; independent production project and manual release workflow configured**
+Status: **Continuous `pages.dev` deployment and independent manually released production domain active**
 
 Last reviewed: **2026-08-15**
 
@@ -61,7 +61,7 @@ The production domain requires a distinct deployment target because Cloudflare P
 | Deployable source | `www/` from a selected commit belonging to `main` |
 | Automatic deployments | None |
 | Deployment method | Manually dispatched GitHub Actions workflow using Wrangler |
-| Custom domains | None yet; `livingintelligence.xyz` is the intended attachment |
+| Custom domains | `livingintelligence.xyz` and `www.livingintelligence.xyz`; both active |
 
 The production project will also receive a Cloudflare-provided `pages.dev` hostname, but it is an implementation endpoint for manual release verification, not the continuously updated preview target or the canonical public origin.
 
@@ -83,7 +83,7 @@ This automatic deployment path remains active after the custom domain launches. 
 
 ## Manually triggered custom-domain releases
 
-State: **project, GitHub environment, scoped secrets, and workflow configured; first deployment and domain activation pending**
+State: **active; first manual deployment verified and production domains serving**
 
 Use a separate Pages project. Never attach the custom domain to `livingintelligence-xyz`, because every automatic `main` deployment to that project would also update the domain.
 
@@ -188,13 +188,18 @@ As of the review date above:
 - The Git-connected Cloudflare Pages project `livingintelligence-xyz` exists and publishes `www/` from every `main` commit to `https://livingintelligence-xyz.pages.dev`.
 - The initial production deployment succeeded and was reconciled to Git commit `6f44a8e35fccd202ae126a10c8bea5f0c62b2495`.
 - Automatic production deployments and preview deployments are enabled. A GitHub push to `main` was observed triggering a successful production deployment.
-- The project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
+- The continuous project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
 - An unknown path currently returns the homepage with HTTP `200`; an explicit production 404 policy remains a separate decision.
 - The separate Direct Upload project `livingintelligence-xyz-production` exists with production branch metadata set to `main` and no Git integration.
 - `.github/workflows/deploy-production.yml` provides the only production-project deployment path and pins Wrangler `4.123.0`.
 - The GitHub `production` environment exists without an approval rule and contains scoped `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` secrets.
 - The provider-specific Pages hostnames receive `X-Robots-Tag: noindex` from `www/_headers`; this rule does not match the production custom domain.
-- No DNS record or custom domain has been changed by this repository setup work.
+- The first successful manual production deployment is Cloudflare deployment `79cf2182-66a9-454c-9393-dd0f83a75f3f`, sourced from commit `858011acfb1f6ac492fe0a4955c20cf7ca5eaa4f`.
+- `livingintelligence.xyz` and `www.livingintelligence.xyz` are attached only to `livingintelligence-xyz-production`; both Pages domain validation and verification states are active.
+- Proxied apex and `www` CNAME records point to `livingintelligence-xyz-production.pages.dev`. Existing mail and site-verification records remain unchanged.
+- A zone-level Single Redirect permanently redirects normal `www` traffic to the apex with the path and query string preserved. `/.well-known/` is excluded so certificate validation and renewal can reach Pages.
+- Both production hostnames serve dedicated Google Trust Services certificates. The apex returns the intended page and required assets over HTTPS without a production `noindex` header.
+- Cloudflare Email Address Obfuscation transforms the public custom-domain HTML. The workflow therefore retains its exact-byte comparison against the immutable deployment URL and validates production-specific markers on the custom-domain response.
 
 Future agents must re-verify every provider-side status item before implementation because this section can become stale.

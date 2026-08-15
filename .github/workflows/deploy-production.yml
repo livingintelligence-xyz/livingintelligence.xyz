@@ -181,7 +181,17 @@ jobs:
           if jq -e '.result.domains | index("livingintelligence.xyz")' <<< "$project" > /dev/null; then
             curl --fail --silent --show-error --retry 10 --retry-all-errors \
               https://livingintelligence.xyz/ --output /tmp/production-index.html
-            cmp --silent www/index.html /tmp/production-index.html
+
+            # Zone-level Cloudflare features such as Email Address Obfuscation may
+            # transform the public HTML. The immutable deployment URL above remains
+            # the exact-byte source check; verify production-specific markers here.
+            grep -Eq '<title>Living Intelligence — Technology Studio in San Francisco</title>' \
+              /tmp/production-index.html
+            grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/"[[:space:]]*/?>' \
+              /tmp/production-index.html
+            grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/"[[:space:]]*/?>' \
+              /tmp/production-index.html
+            grep -Fq 'Intelligence for living, that lives.' /tmp/production-index.html
 
             for path in site.webmanifest robots.txt sitemap.xml assets/og-1200x627.png; do
               curl --fail --silent --show-error --retry 5 --retry-all-errors \

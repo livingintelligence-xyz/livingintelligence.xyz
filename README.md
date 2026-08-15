@@ -10,8 +10,8 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 
 - The initial landing page and brand assets are ready in `www/`.
 - The Git-connected Cloudflare Pages project is active at [livingintelligence-xyz.pages.dev](https://livingintelligence-xyz.pages.dev/), with `main` publishing `www/` automatically.
-- The separate Direct Upload production project and manually dispatched domain-release workflow are configured. The custom domain and production DNS are not attached yet.
-- The LinkedIn URL in the page is provisional and should be confirmed before launch.
+- The separate Direct Upload production project is live at [livingintelligence.xyz](https://livingintelligence.xyz/), with releases controlled by the manually dispatched domain-release workflow and `www` permanently redirected to the apex.
+- The LinkedIn URL in the page remains provisional and should be confirmed.
 - No open-source license has been selected. Public visibility does not grant permission to reuse the source or brand assets.
 
 ## Repository structure
@@ -64,16 +64,16 @@ jq empty www/site.webmanifest
 git diff --check
 ```
 
-Before production launch, also verify the canonical URL, social preview, icon responses, outbound links, responsive layout, reduced-motion behavior, and the final custom-domain redirects.
+For production releases, also verify the canonical URL, social preview, icon responses, outbound links, responsive layout, reduced-motion behavior, and the custom-domain redirects.
 
 ## Deployment
 
 The deployment policy uses two independent Cloudflare Pages targets, with `www/` as the deployable static site:
 
 1. The existing Git-connected project automatically publishes every commit to `main` at [livingintelligence-xyz.pages.dev](https://livingintelligence-xyz.pages.dev/). That automation stays enabled permanently, including after the custom domain launches.
-2. The separate Direct Upload project `livingintelligence-xyz-production` will serve `livingintelligence.xyz` and does not use Git-triggered deployments. The manually dispatched GitHub Actions workflow may deploy any commit verified as belonging to `main`, using Wrangler, serialized runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks.
+2. The separate Direct Upload project `livingintelligence-xyz-production` serves `livingintelligence.xyz` and does not use Git-triggered deployments. The manually dispatched GitHub Actions workflow may deploy any commit verified as belonging to `main`, using Wrangler, serialized runs, Cloudflare credentials stored as GitHub environment secrets, and post-deploy checks.
 
-Both deployment paths are configured independently. The production domain, DNS, and `www` redirect remain to be activated; analytics is not configured.
+Both deployment paths are active and independent. The production apex and `www` DNS records point only to the Direct Upload project, and `www` permanently redirects to the apex while preserving paths and query strings. Analytics is not configured.
 
 See [the Cloudflare Pages deployment plan](docs/cloudflare-pages.md) for the independent deployment targets, manual domain-release workflow, verification, and rollback behavior.
 
