@@ -11,8 +11,6 @@
 <meta name="theme-color" content="#0D0B09" />
 <meta name="color-scheme" content="dark" />
 <meta name="application-name" content="Living Intelligence" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Living Intelligence" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="msapplication-TileColor" content="#0D0B09" />
@@ -63,7 +61,7 @@
       "@id": "https://livingintelligence.xyz/#organization",
       "name": "Living Intelligence",
       "url": "https://livingintelligence.xyz/",
-      "description": "Living Intelligence is an independent technology studio in San Francisco exploring how intelligence can improve the way people live, work, create, and interact with their environments.",
+      "description": "Intelligence you can trust carries the ordinary things, leaving you free for the choices only you can make. An independent technology studio in San Francisco.",
       "slogan": "Intelligence for living, that lives.",
       "logo": { "@id": "https://livingintelligence.xyz/#logo" },
       "founder": { "@id": "https://alexfili.pe/#person" },
@@ -79,7 +77,10 @@
         "email": "hello@livingintelligence.xyz",
         "contactType": "general inquiries"
       },
-      "sameAs": ["https://github.com/livingintelligence-xyz"]
+      "sameAs": [
+        "https://github.com/livingintelligence-xyz",
+        "https://www.linkedin.com/company/livingintelligence-xyz"
+      ]
     },
     {
       "@type": "Person",
@@ -171,7 +172,7 @@
     --mono:'IBM Plex Mono',ui-monospace,monospace;
     --mark:clamp(96px,11.5vw,142px);
     --lk-dir:row; --lk-gap:clamp(20px,2.4vw,34px);
-    --wm-size:clamp(27px,3.3vw,43px); --wm-track:.16em;
+    --wm-size:clamp(27px,3.3vw,43px); --wm-track:.15em;
   }
   body{
     background:var(--bg);color:var(--fg);font-family:var(--body);
@@ -194,18 +195,15 @@
   .hero{display:flex;flex-direction:column;gap:clamp(22px,3.4vh,34px)}
   .lockup{display:flex;flex-direction:var(--lk-dir);align-items:center;gap:var(--lk-gap);animation:li-rise 1s cubic-bezier(.2,.7,.2,1) both}
   .mark{position:relative;width:var(--mark);aspect-ratio:351.3/350.3;flex:none}
-  .mark img,.mark svg{position:absolute;inset:0;width:100%;height:100%}
-  .mark img{object-fit:contain}
-  .mark svg{overflow:visible}
+  .mark svg{display:block;width:100%;height:100%;overflow:visible}
   .names{display:flex;flex-direction:column;gap:clamp(6px,.8vh,12px)}
   h1{
     margin:0;font-family:var(--wm);font-weight:500;text-transform:uppercase;
-    letter-spacing:.15em;font-size:var(--wm-size);line-height:1.02;color:var(--fg);
+    letter-spacing:var(--wm-track);font-size:var(--wm-size);line-height:1.02;color:var(--fg);
   }
   .motto{margin:0;font-size:clamp(20px,2vw,26px);letter-spacing:.005em;color:var(--fg-soft);opacity:.92;line-height:1.3;text-wrap:balance}
-  .about{margin-block:clamp(5.5px,.85vh,8.5px);max-width:58ch;font-size:clamp(15px,1.25vw,18px);letter-spacing:.005em;line-height:1.55;color:var(--fg-soft);text-wrap:pretty;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .18s both}
+  .about{margin-block:clamp(5.5px,.85vh,8.5px);max-width:44ch;font-size:clamp(16px,1.45vw,20px);letter-spacing:.005em;line-height:1.6;color:var(--fg-soft);text-wrap:pretty;animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .18s both}
   .about p{margin:0}
-  .about p+p{margin-top:.7em}
   .work{animation:li-rise 1s cubic-bezier(.2,.7,.2,1) .32s both}
   .work nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,2.6vw,34px);font-size:clamp(13px,1.15vw,15px)}
   a{color:var(--fg-soft);text-decoration:none}
@@ -272,11 +270,16 @@
     <div class="hero">
       <div class="lockup">
         <div class="mark">
-          <img src="/assets/living-intelligence-logo.png" width="800" height="798" alt="Living Intelligence logo" decoding="async" fetchpriority="high" />
           <svg viewBox="-80.6 -49.1 351.3 350.3" aria-hidden="true" focusable="false" fill="none">
           <defs>
+            <linearGradient id="liHeat" gradientUnits="userSpaceOnUse" x1="-80.6" y1="301.2" x2="270.7" y2="-49.1">
+              <stop offset="0" stop-color="var(--g1)"></stop>
+              <stop offset="0.5" stop-color="var(--g2)"></stop>
+              <stop offset="1" stop-color="var(--g3)"></stop>
+            </linearGradient>
             <path id="liPath" pathLength="1000" d="M -54.13 274.63 L -31.50 252.00 L 190.00 252.00 A 31.5 31.5 0 0 0 190.00 189.00 L 0.00 189.00 A 31.5 31.5 0 0 1 0.00 126.00 L 190.00 126.00 A 31.5 31.5 0 0 0 190.00 63.00 L 0.00 63.00 A 31.5 31.5 0 0 1 0.00 0.00 L 190.00 0.00 L 221.50 0.00 L 244.13 -22.63"></path>
           </defs>
+          <use href="#liPath" stroke="url(#liHeat)" stroke-width="25" stroke-linecap="round"></use>
           <g id="heat" stroke="var(--g3)" stroke-width="25" stroke-linecap="round">
             <use class="heat-layer" href="#liPath" stroke-dasharray="230 2000" stroke-dashoffset="2345" opacity="0" style="--heat-enter:2460;--heat-exit:1085;--heat-opacity:.012"></use>
             <use class="heat-layer" href="#liPath" stroke-dasharray="220 2000" stroke-dashoffset="2330" opacity="0" style="--heat-enter:2445;--heat-exit:1070;--heat-opacity:.015"></use>
