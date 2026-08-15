@@ -23,6 +23,9 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ├── README.md
 ├── docs/
 │   └── cloudflare-pages.md  Intended Pages environments and release behavior
+├── scripts/
+│   ├── build_og.py          Generates the Open Graph SVG and PNG artwork
+│   └── build_social.py      Generates the broader social artwork kit
 └── www/
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
@@ -32,6 +35,10 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ```
 
 The Fold used in the hero is an inline SVG in `index.html`. The standalone `li-icon.svg` and PNG variants are used for browser, device, and social metadata.
+
+## Brand asset generators
+
+The source generators for the checked-in Open Graph and social artwork live in `scripts/`. They are optional design-time utilities, not dependencies of the deployed site. Each script documents its setup and outputs; `build_social.py` additionally requires Pillow for PNG rendering.
 
 ## Run locally
 
