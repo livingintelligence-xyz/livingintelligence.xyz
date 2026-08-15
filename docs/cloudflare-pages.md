@@ -142,13 +142,19 @@ It should also fail if any required deployment artifact is missing:
 - `www/robots.txt`
 - `www/site.webmanifest`
 - `www/sitemap.xml`
+- `www/favicon.ico`
+- `www/apple-touch-icon.png`
 - `www/assets/li-icon.svg`
 - `www/assets/li-icon-16.png`
 - `www/assets/li-icon-32.png`
 - `www/assets/li-icon-180.png`
 - `www/assets/li-icon-192.png`
 - `www/assets/li-icon-512.png`
+- `www/assets/li-icon-maskable-192.png`
+- `www/assets/li-icon-maskable-512.png`
+- `www/assets/living-intelligence-logo.png`
 - `www/assets/og-1200x627.png`
+- `www/assets/safari-pinned-tab.svg`
 
 ## Post-deploy verification
 

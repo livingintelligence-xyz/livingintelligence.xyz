@@ -1,14 +1,20 @@
 {
   "name": "Living Intelligence",
   "short_name": "Living Intelligence",
-  "description": "Intelligence for living, that lives.",
+  "description": "Intelligence you can trust carries the ordinary things, leaving you free for the choices only you can make. An independent technology studio in San Francisco.",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
-  "display": "browser",
+  "lang": "en-US",
+  "dir": "ltr",
+  "display": "standalone",
   "background_color": "#0D0B09",
+  "theme_color": "#0D0B09",
   "icons": [
-    { "src": "/assets/li-icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/assets/li-icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/assets/li-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "/assets/li-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/li-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/li-icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/li-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/li-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }
