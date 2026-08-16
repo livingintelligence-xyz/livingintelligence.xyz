@@ -176,7 +176,7 @@
 
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;overflow:hidden}
+  html,body{margin:0;padding:0;overflow-x:hidden;overflow-y:auto}
   :root{
     --bg:#0D0B09; --fg:#F5F0E8; --fg-soft:#E8DDD0; --muted:#A8977F;
     --line:rgba(245,240,232,.10); --line-2:rgba(245,240,232,.18);
@@ -248,11 +248,6 @@
     footer{font-size:11px}
     footer::before{left:clamp(24px,6vw,88px);right:clamp(24px,6vw,88px);width:auto;transform:none}
     .who-detail{display:block}
-  }
-  @media (max-height:640px) and (max-width:700px),
-    (max-height:560px) and (min-width:701px){
-    html,body{overflow-x:hidden;overflow-y:auto}
-    main{justify-content:flex-start}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
