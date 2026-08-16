@@ -176,7 +176,8 @@
 
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;overflow-x:hidden;overflow-y:auto}
+  html,body{margin:0;padding:0;overflow:hidden}
+  html.is-scrollable,html.is-scrollable body{overflow-x:hidden;overflow-y:auto}
   :root{
     --bg:#0D0B09; --fg:#F5F0E8; --fg-soft:#E8DDD0; --muted:#A8977F;
     --line:rgba(245,240,232,.10); --line-2:rgba(245,240,232,.18);
@@ -341,5 +342,21 @@
     <p class="who">An independent technology studio by <span class="who-detail"><a href="https://alexfili.pe/" target="_blank" rel="author noopener">Álex Filipe Santos</a> in San Francisco.</span></p>
   </footer>
 </div>
+<script>
+  (() => {
+    const root = document.documentElement;
+    const page = document.querySelector(".page");
+    const updateScrollLock = () => {
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      root.classList.toggle("is-scrollable", page.scrollHeight > viewportHeight + 1);
+    };
+
+    if ("ResizeObserver" in window) new ResizeObserver(updateScrollLock).observe(page);
+    window.addEventListener("resize", updateScrollLock);
+    window.visualViewport?.addEventListener("resize", updateScrollLock);
+    document.fonts?.ready.then(updateScrollLock);
+    requestAnimationFrame(updateScrollLock);
+  })();
+</script>
 </body>
 </html>
