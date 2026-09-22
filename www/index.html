@@ -226,6 +226,13 @@
   }
   footer::before{content:"";position:absolute;top:0;left:50%;width:calc(100vw - 40px);height:1px;background:var(--line);transform:translateX(-50%)}
   footer p{margin:0;font-family:var(--mono);letter-spacing:.02em}
+  footer .who{width:100%}
+  .legal-inline{display:none;white-space:nowrap}
+  .legal-separator{margin-inline:1ch}
+  footer .legal{opacity:.7}
+  footer.has-inline-legal .who{white-space:nowrap}
+  footer.has-inline-legal .legal-inline{display:inline}
+  footer.has-inline-legal .legal{display:none}
   .meta{display:flex;align-items:baseline;font-family:var(--mono);letter-spacing:.02em;white-space:nowrap}
   .socials{display:inline-flex;align-items:baseline}
   .meta>.socials::before{content:"|";margin:0 14px;color:var(--muted);opacity:.6}
@@ -326,23 +333,36 @@
         <a href="https://www.linkedin.com/company/livingintelligence-xyz" target="_blank" rel="noopener">LinkedIn</a>
       </span>
     </div>
-    <p class="who">An independent technology studio by <span class="who-detail"><a href="https://alexfili.pe/" target="_blank" rel="author noopener">Álex Filipe Santos</a> in San Francisco.</span></p>
+    <p class="who"><span class="legal-inline">Living Intelligence LLC <span class="legal-separator" aria-hidden="true">•</span> </span>An independent technology studio by <span class="who-detail"><a href="https://alexfili.pe/" target="_blank" rel="author noopener">Álex Filipe Santos</a> in San Francisco.</span></p>
+    <p class="legal">Living Intelligence LLC</p>
   </footer>
 </div>
 <script>
   (() => {
     const root = document.documentElement;
     const page = document.querySelector(".page");
-    const updateScrollLock = () => {
+    const footer = document.querySelector("footer");
+    const description = footer.querySelector(".who");
+    const descriptionRange = document.createRange();
+    descriptionRange.selectNodeContents(description);
+    const mobileLayout = window.matchMedia("(max-width:640px)");
+    const updateLayout = () => {
+      // Measure the complete, unwrapped line before choosing the footer layout.
+      footer.classList.toggle("has-inline-legal", !mobileLayout.matches);
+      if (!mobileLayout.matches) {
+        const fits = descriptionRange.getBoundingClientRect().width <= description.getBoundingClientRect().width;
+        footer.classList.toggle("has-inline-legal", fits);
+      }
+
       const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
       root.classList.toggle("is-scrollable", page.scrollHeight > viewportHeight + 1);
     };
 
-    if ("ResizeObserver" in window) new ResizeObserver(updateScrollLock).observe(page);
-    window.addEventListener("resize", updateScrollLock);
-    window.visualViewport?.addEventListener("resize", updateScrollLock);
-    document.fonts?.ready.then(updateScrollLock);
-    requestAnimationFrame(updateScrollLock);
+    if ("ResizeObserver" in window) new ResizeObserver(updateLayout).observe(page);
+    window.addEventListener("resize", updateLayout);
+    window.visualViewport?.addEventListener("resize", updateLayout);
+    document.fonts?.ready.then(updateLayout);
+    requestAnimationFrame(updateLayout);
   })();
 </script>
 </body>
