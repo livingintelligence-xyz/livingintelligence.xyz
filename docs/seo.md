@@ -1,6 +1,6 @@
 # Search discoverability plan
 
-Reviewed: 2026-09-23. The repository implementation is approved. No production-domain release or search-console submission has been performed.
+Reviewed: 2026-09-23. The repository implementation is approved. Release and submission evidence is recorded separately when those actions run.
 
 ## Findings and implemented changes
 
@@ -44,7 +44,7 @@ ChatGPT search uses OAI-SearchBot. It is allowed by the current wildcard robots 
 
 Googlebot controls Google Search crawling. Google-Extended controls training and grounding uses in Gemini Apps and certain other Google systems; it is not a Google Search ranking signal. The existing wildcard policy permits it. This review makes no promise about Gemini citations or model recall. See [Google's crawler controls](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers#google-extended).
 
-No keyword meta tag, hidden keyword block, fabricated schema, doorway pages, or speculative `llms.txt` ranking mechanism is included. IndexNow is outside this proposal; the existing opaque root text file does not by itself establish a configured or verified submission integration.
+No keyword meta tag, hidden keyword block, fabricated schema, doorway pages, or speculative `llms.txt` ranking mechanism is included. IndexNow uses the root verification file and `scripts/submit_indexnow.py`; a successful API response confirms receipt, not indexing or ranking.
 
 ## Highest-impact work after review
 
@@ -55,7 +55,7 @@ No keyword meta tag, hidden keyword block, fabricated schema, doorway pages, or 
 5. Confirm the exact LinkedIn company URL, still marked provisional in README.md. Ensure the company-owned LinkedIn and GitHub profiles use the same brand, description, and website. The founder and project pages already link to the studio; keep those real relationships accurate. Do not buy links or create artificial profiles.
 6. Publish substantive project progress, technical case studies, and release notes as real work becomes available. Explain the problem, design choices, status, and evidence. Link from relevant project repositories and genuine professional profiles. Avoid duplicating project websites or publishing generic AI articles solely to capture the ambiguous phrase.
 
-Account verification, provider configuration, external profile edits, production release, and indexing submissions have not been performed. Rankings and AI citations remain controlled by the respective services.
+Account verification and external profile edits have not been performed. Production releases and IndexNow submissions must be recorded when run. Rankings and AI citations remain controlled by the respective services.
 
 ## Measurement
 

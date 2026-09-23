@@ -75,8 +75,10 @@ jobs:
 
           required_files=(
             www/index.html
+            www/about/index.html
             www/404.html
             www/_headers
+            www/2e90d09004b00d32654621d377eb2b17.txt
             www/robots.txt
             www/site.webmanifest
             www/sitemap.xml
@@ -107,8 +109,16 @@ jobs:
 
           grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/"[[:space:]]*/?>' www/index.html
           grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/"[[:space:]]*/?>' www/index.html
+          grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/about/"[[:space:]]*/?>' www/about/index.html
+          grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/about/"[[:space:]]*/?>' www/about/index.html
           grep -Fq '<link rel="stylesheet" href="/assets/fonts/fonts.css" />' www/index.html
+          grep -Fq '<link rel="stylesheet" href="/assets/fonts/fonts.css" />' www/about/index.html
           grep -Fq '<link rel="stylesheet" href="/assets/fonts/fonts.css" />' www/404.html
+
+          indexnow_key_file="www/2e90d09004b00d32654621d377eb2b17.txt"
+          indexnow_key="$(tr -d '\r\n' < "$indexnow_key_file")"
+          test "$indexnow_key" = "$(basename "$indexnow_key_file" .txt)"
+          grep -Eq '^[A-Za-z0-9-]{8,128}$' <<< "$indexnow_key"
 
           if grep -REq 'fonts\.(googleapis|gstatic)\.com' www \
             --include='*.html' --include='*.css'; then
@@ -184,6 +194,16 @@ jobs:
             "$DEPLOYMENT_URL/" --output /tmp/deployed-index.html
           cmp --silent www/index.html /tmp/deployed-index.html
 
+          curl --fail --silent --show-error --retry 5 --retry-all-errors \
+            "$DEPLOYMENT_URL/about/" --output /tmp/deployed-about.html
+          cmp --silent www/about/index.html /tmp/deployed-about.html
+
+          curl --fail --silent --show-error --retry 5 --retry-all-errors \
+            "$DEPLOYMENT_URL/2e90d09004b00d32654621d377eb2b17.txt" \
+            --output /tmp/deployed-indexnow-key.txt
+          cmp --silent www/2e90d09004b00d32654621d377eb2b17.txt \
+            /tmp/deployed-indexnow-key.txt
+
           not_found_status="$(curl --silent --show-error --retry 5 --retry-all-errors \
             --output /tmp/deployed-404.html --write-out '%{http_code}' \
             "$DEPLOYMENT_URL/__not-found-check")"
@@ -211,17 +231,30 @@ jobs:
           if jq -e '.result.domains | index("livingintelligence.xyz")' <<< "$project" > /dev/null; then
             curl --fail --silent --show-error --retry 10 --retry-all-errors \
               https://livingintelligence.xyz/ --output /tmp/production-index.html
+            curl --fail --silent --show-error --retry 10 --retry-all-errors \
+              https://livingintelligence.xyz/about/ --output /tmp/production-about.html
+            curl --fail --silent --show-error --retry 10 --retry-all-errors \
+              https://livingintelligence.xyz/2e90d09004b00d32654621d377eb2b17.txt \
+              --output /tmp/production-indexnow-key.txt
 
             # Zone-level Cloudflare features such as Email Address Obfuscation may
             # transform the public HTML. The immutable deployment URL above remains
             # the exact-byte source check; verify production-specific markers here.
-            grep -Eq '<title>Living Intelligence — Technology Studio in San Francisco</title>' \
+            grep -Fq '<title>Living Intelligence | Technology Studio in San Francisco</title>' \
               /tmp/production-index.html
             grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/"[[:space:]]*/?>' \
               /tmp/production-index.html
             grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/"[[:space:]]*/?>' \
               /tmp/production-index.html
             grep -Fq 'Intelligence for living, that lives.' /tmp/production-index.html
+            grep -Eq '<link rel="canonical" href="https://livingintelligence.xyz/about/"[[:space:]]*/?>' \
+              /tmp/production-about.html
+            grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/about/"[[:space:]]*/?>' \
+              /tmp/production-about.html
+            grep -Fq '<title>About Living Intelligence | Studio, Founder &amp; Projects</title>' \
+              /tmp/production-about.html
+            cmp --silent www/2e90d09004b00d32654621d377eb2b17.txt \
+              /tmp/production-indexnow-key.txt
 
             for path in \
               site.webmanifest \

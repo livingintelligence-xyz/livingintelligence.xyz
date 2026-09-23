@@ -2,7 +2,7 @@
 
 Status: **Continuous `pages.dev` deployment and independent manually released production domain active**
 
-Last reviewed: **2026-08-15**
+Last reviewed: **2026-09-23**
 
 This document is the repository source of truth for the continuous Cloudflare Pages deployment and the intended production-domain behavior for `livingintelligence.xyz`. Provider state can change independently, so future deployment work must still inspect the current GitHub, Cloudflare Pages, deployment, custom-domain, and DNS state before making changes.
 
@@ -138,8 +138,10 @@ git diff --check
 It should also fail if any required deployment artifact is missing:
 
 - `www/index.html`
+- `www/about/index.html`
 - `www/404.html`
 - `www/_headers`
+- `www/2e90d09004b00d32654621d377eb2b17.txt`
 - `www/robots.txt`
 - `www/site.webmanifest`
 - `www/sitemap.xml`
@@ -170,13 +172,33 @@ For the continuous deployment target, verify `https://livingintelligence-xyz.pag
 For every manually triggered domain release, verify at least:
 
 - `https://livingintelligence.xyz/` returns the intended page over HTTPS.
+- `https://livingintelligence.xyz/about/` returns the intended About page over HTTPS.
 - `https://www.livingintelligence.xyz/` permanently redirects to the apex while preserving path and query data.
+- The root IndexNow key file returns the exact configured key as plain text.
 - `/site.webmanifest`, `/robots.txt`, `/sitemap.xml`, `/assets/og-1200x627.png`, the local font stylesheet, and every referenced WOFF2 file return successful responses with appropriate content types.
 - The HTML canonical URL and Open Graph URL remain `https://livingintelligence.xyz/`.
 - An unknown path returns the branded `www/404.html` page with HTTP `404`.
 - The deployed source can be tied to the selected GitHub commit.
 
 Browser visual QA remains a user-run step unless explicitly requested in a future task.
+
+## IndexNow submission
+
+Run IndexNow only after the manual production workflow succeeds and the public domain serves the released canonical pages and root key file. The checked-in key file is `www/2e90d09004b00d32654621d377eb2b17.txt`; its filename stem and contents must remain identical.
+
+Preview and validate the submission without sending it:
+
+```sh
+python3 scripts/submit_indexnow.py --dry-run
+```
+
+Then submit every canonical page URL in `www/sitemap.xml` to the global IndexNow endpoint:
+
+```sh
+python3 scripts/submit_indexnow.py
+```
+
+Treat HTTP `200` as received successfully and HTTP `202` as received with key validation pending. Neither response proves that a search engine indexed or ranked a URL. Record the endpoint, response status, submitted URLs, key-file verification, production commit, and deployment workflow run.
 
 ## Rollback
 
@@ -197,9 +219,10 @@ As of the review date above:
 - Automatic production deployments and preview deployments are enabled. A GitHub push to `main` was observed triggering a successful production deployment.
 - The continuous project has only its Cloudflare-provided `pages.dev` hostname; no custom domain is attached and Web Analytics is disabled.
 - The live root page and required metadata assets return successful HTTPS responses, and the deployed HTML matches `www/index.html` exactly.
-- The deployable source includes a top-level `www/404.html`, preventing Cloudflare Pages from treating the static site as an SPA; production will return this page with HTTP `404` after the next manual domain release.
+- The deployable source includes a top-level `www/404.html`, preventing Cloudflare Pages from treating the static site as an SPA; production returns this page with HTTP `404`.
 - The separate Direct Upload project `livingintelligence-xyz-production` exists with production branch metadata set to `main` and no Git integration.
 - `.github/workflows/deploy-production.yml` provides the only production-project deployment path and pins Wrangler `4.123.0`.
+- The root IndexNow key and `scripts/submit_indexnow.py` provide the verified, sitemap-driven post-release submission path.
 - The GitHub `production` environment exists without an approval rule and contains scoped `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` secrets.
 - The provider-specific Pages hostnames receive `X-Robots-Tag: noindex` from `www/_headers`; this rule does not match the production custom domain.
 - The first successful manual production deployment is Cloudflare deployment `79cf2182-66a9-454c-9393-dd0f83a75f3f`, sourced from commit `858011acfb1f6ac492fe0a4955c20cf7ca5eaa4f`.

@@ -27,10 +27,12 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 │   └── cloudflare-pages.md  Intended Pages environments and release behavior
 ├── scripts/
 │   ├── build_og.py          Generates the Open Graph SVG and PNG artwork
-│   └── build_social.py      Generates the broader social artwork kit
+│   ├── build_social.py      Generates the broader social artwork kit
+│   └── submit_indexnow.py   Submits canonical sitemap URLs after a release
 └── www/
     ├── _headers            Host-specific crawler policy for Pages hostnames
     ├── 404.html            Branded not-found response for unknown paths
+    ├── 2e90…b17.txt        IndexNow ownership-verification key
     ├── about/index.html    Studio identity, founder, projects, and contact
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
