@@ -31,6 +31,7 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 └── www/
     ├── _headers            Host-specific crawler policy for Pages hostnames
     ├── 404.html            Branded not-found response for unknown paths
+    ├── about/index.html    Studio identity, founder, projects, and contact
     ├── assets/             Favicons, app icons, vector mark, and social preview
     ├── index.html          Landing page, styles, and inline Fold animation
     ├── robots.txt          Search crawler policy
@@ -77,6 +78,10 @@ The deployment policy uses two independent Cloudflare Pages targets, with `www/`
 Both deployment paths are active and independent. The production apex and `www` DNS records point only to the Direct Upload project, and `www` permanently redirects to the apex while preserving paths and query strings. Analytics is not configured.
 
 See [the Cloudflare Pages deployment plan](docs/cloudflare-pages.md) for the independent deployment targets, manual domain-release workflow, verification, and rollback behavior.
+
+## Search discoverability
+
+See [the SEO plan](docs/seo.md) for the query map, crawler guidance, implemented page changes, and the production release and indexing follow-up.
 
 ## Contact
 
