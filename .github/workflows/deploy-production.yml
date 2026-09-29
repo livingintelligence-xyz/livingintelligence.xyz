@@ -253,7 +253,7 @@ jobs:
                   /tmp/production-about.html &&
                 grep -Eq '<meta property="og:url" content="https://livingintelligence.xyz/about/"[[:space:]]*/?>' \
                   /tmp/production-about.html &&
-                grep -Fq '<title>About Living Intelligence | Studio, Founder &amp; Projects</title>' \
+                grep -Fq '<title>About Living Intelligence | San Francisco Technology Studio</title>' \
                   /tmp/production-about.html &&
                 cmp --silent www/2e90d09004b00d32654621d377eb2b17.txt \
                   /tmp/production-indexnow-key.txt; then
