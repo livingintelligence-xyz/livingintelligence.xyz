@@ -217,7 +217,7 @@
   a{color:inherit;text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:5px}
   a:hover{color:var(--accent)}
   a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
-  footer{border-top:1px solid var(--line);margin-top:52px;padding-top:24px}
+  footer{border-top:1px solid var(--line);margin-top:52px;padding-top:24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 28px}
   .contact{overflow-wrap:anywhere}
   @media (max-width:640px){
     section{margin-top:36px;padding-top:30px}
@@ -262,7 +262,8 @@
     </section>
   </main>
   <footer>
-    Living Intelligence LLC · San Francisco, California
+    <span>Living Intelligence LLC · San Francisco, California</span>
+    <a href="/">Living Intelligence home</a>
   </footer>
 </div>
 </body>
