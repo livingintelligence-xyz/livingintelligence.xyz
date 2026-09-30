@@ -132,10 +132,9 @@
       "publisher": { "@id": "https://livingintelligence.xyz/#organization" },
       "primaryImageOfPage": { "@id": "https://livingintelligence.xyz/#primaryimage" },
       "mentions": [
-        { "@id": "https://aetherloom.app/#app" },
-        { "@id": "https://alexfili.pe/projects/home-intelligence#project" }
+        { "@id": "https://aetherloom.app/#app" }
       ],
-      "dateModified": "2026-09-23",
+      "dateModified": "2026-09-30",
       "inLanguage": "en-US"
     },
     {
@@ -149,13 +148,6 @@
       "license": "https://github.com/livingintelligence-xyz/aetherloom/blob/main/LICENSE",
       "creator": { "@id": "https://alexfili.pe/#person" },
       "sameAs": ["https://github.com/livingintelligence-xyz/aetherloom"]
-    },
-    {
-      "@type": "CreativeWork",
-      "@id": "https://alexfili.pe/projects/home-intelligence#project",
-      "name": "Home Intelligence",
-      "url": "https://alexfili.pe/projects/home-intelligence",
-      "creator": { "@id": "https://alexfili.pe/#person" }
     }
   ]
 }
@@ -217,26 +209,20 @@
   a:hover{color:var(--g3)}
   a:focus-visible{outline:2px solid var(--g3);outline-offset:4px;border-radius:2px}
   .work nav a{font-family:var(--body);font-weight:500}
-  .work nav a,footer .who a{border-bottom:1px solid var(--line-2);padding-bottom:2px;transition:color .3s,border-color .3s}
-  .work nav a:hover,footer .who a:hover{border-color:var(--g3)}
+  .work nav a{border-bottom:1px solid var(--line-2);padding-bottom:2px;transition:color .3s,border-color .3s}
+  .work nav a:hover{border-color:var(--g3)}
   .work nav a::after{content:"↗";display:inline-block;margin-left:.32em;font-size:.85em;vertical-align:.1em;}
   .work nav a.internal::after{content:none}
   footer{
     position:relative;padding:clamp(22px,3vh,34px) clamp(24px,6vw,88px) clamp(26px,4vh,40px);
     max-width:1180px;width:100%;margin:0 auto;display:flex;flex-direction:column;
-    gap:clamp(16px,2vh,22px);align-items:flex-start;
+    gap:clamp(10px,1.3vh,14px);align-items:flex-start;
     font-size:12.5px;line-height:1.5;color:var(--muted);
     animation:li-fade 1.2s ease .5s both;
   }
   footer::before{content:"";position:absolute;top:0;left:50%;width:calc(100vw - 40px);height:1px;background:var(--line);transform:translateX(-50%)}
   footer p{margin:0;font-family:var(--mono);letter-spacing:.02em}
-  footer .who{width:100%}
-  .legal-inline{display:none;white-space:nowrap}
-  .legal-separator{margin-inline:1ch}
   footer .legal{opacity:.7}
-  footer.has-inline-legal .who{white-space:nowrap}
-  footer.has-inline-legal .legal-inline{display:inline}
-  footer.has-inline-legal .legal{display:none}
   .meta{display:flex;align-items:baseline;font-family:var(--mono);letter-spacing:.02em;white-space:nowrap}
   .socials{display:inline-flex;align-items:baseline}
   .meta>.socials::before{content:"|";margin:0 14px;color:var(--muted);opacity:.6}
@@ -246,7 +232,6 @@
     .about{margin-block:clamp(11px,1.7vh,17px)}
     footer{font-size:11px}
     footer::before{left:clamp(24px,6vw,88px);right:clamp(24px,6vw,88px);width:auto;transform:none}
-    .who-detail{display:block}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
@@ -323,10 +308,8 @@
       </div>
 
       <div class="work">
-        <nav aria-label="Studio and projects">
+        <nav aria-label="Studio">
           <a class="internal" href="/about/">About the studio</a>
-          <a href="https://aetherloom.app/" target="_blank" rel="noopener">Aetherloom</a>
-          <a href="https://alexfili.pe/projects/home-intelligence" target="_blank" rel="noopener">Home Intelligence</a>
         </nav>
       </div>
     </div>
@@ -339,7 +322,6 @@
         <a href="https://www.linkedin.com/company/livingintelligence-xyz" target="_blank" rel="noopener">LinkedIn</a>
       </span>
     </div>
-    <p class="who">An independent technology studio by <span class="who-detail"><a href="https://alexfili.pe/" target="_blank" rel="author noopener">Álex Filipe Santos</a> in San Francisco</span><span class="legal-inline"> <span class="legal-separator" aria-hidden="true">•</span> Living Intelligence LLC</span></p>
     <p class="legal">Living Intelligence LLC</p>
   </footer>
 </div>
@@ -347,19 +329,7 @@
   (() => {
     const root = document.documentElement;
     const page = document.querySelector(".page");
-    const footer = document.querySelector("footer");
-    const description = footer.querySelector(".who");
-    const descriptionRange = document.createRange();
-    descriptionRange.selectNodeContents(description);
-    const mobileLayout = window.matchMedia("(max-width:640px)");
     const updateLayout = () => {
-      // Measure the complete, unwrapped line before choosing the footer layout.
-      footer.classList.toggle("has-inline-legal", !mobileLayout.matches);
-      if (!mobileLayout.matches) {
-        const fits = descriptionRange.getBoundingClientRect().width <= description.getBoundingClientRect().width;
-        footer.classList.toggle("has-inline-legal", fits);
-      }
-
       const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
       // Decorative overflow must not make the document taller than its content.
       root.classList.toggle("is-scrollable", page.getBoundingClientRect().height > viewportHeight + 1);
