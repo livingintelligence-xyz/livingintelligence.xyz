@@ -19,7 +19,6 @@ This repository contains the source for [livingintelligence.xyz](https://livingi
 ```text
 .
 ├── AGENTS.md              Repository instructions for coding agents
-├── CLAUDE.md              Mirror of AGENTS.md for compatible tools
 ├── README.md
 ├── .github/workflows/
 │   └── deploy-production.yml  Manual production-domain release workflow
