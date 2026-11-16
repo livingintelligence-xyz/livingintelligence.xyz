@@ -1,5 +1,3 @@
-<!-- AGENTS.md and CLAUDE.md are identical mirrors. Apply every instruction change to both files and verify them with `cmp -s AGENTS.md CLAUDE.md`. -->
-
 # Living Intelligence website agent instructions
 
 ## Project
